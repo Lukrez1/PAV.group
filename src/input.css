@@ -59,9 +59,9 @@ body {
 .s4-card {
     position: absolute;
     width: 88vw;
-    height: 20vh;
-    min-height: 140px; 
-    max-height: 180px;
+    height: 35vh;
+    min-height: 240px; 
+    max-height: 320px;
     top: 50%;
     left: 50%;
     will-change: transform, opacity;
@@ -70,9 +70,9 @@ body {
 #white-rect {
     position: absolute;
     width: 88vw;
-    height: 20vh;
-    min-height: 140px;
-    max-height: 180px;
+    height: 35vh;
+    min-height: 240px;
+    max-height: 320px;
     border-radius: 12px;
     background-color: #ffffff;
     top: 50%;

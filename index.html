@@ -12,6 +12,16 @@
     <!-- CSS Estático Compilado (Tailwind + Estilos Customizados + Font Face Local) -->
     <link rel="stylesheet" href="assets/css/styles.css">
     
+    <style>
+        @media (max-width: 767px) {
+            .s4-card, #white-rect {
+                height: 35vh !important;
+                min-height: 240px !important;
+                max-height: 320px !important;
+            }
+        }
+    </style>
+    
     <!-- GSAP, Lenis & Script Principal (Deferidos para máxima performance) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
