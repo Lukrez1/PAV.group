@@ -1,13 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuClose = document.getElementById('menu-close');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (menuToggle && menuClose && mobileMenu) {
-        menuToggle.addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
-        menuClose.addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
-    }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     
@@ -27,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         lenis.stop();
         
-        // Finalização assíncrona do Preloader
+        // Finalização assíncrona do Preloader (Estático na Hero)
         const finishLoading = () => {
             if (window.__preloaderFinished) return;
             window.__preloaderFinished = true;
@@ -59,21 +50,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
                 .to("#preloader-counter", { opacity: 0, y: -10, duration: 0.2, ease: "power1.in" })
                 .to("#preloader-logo", { scale: 30, opacity: 0, duration: 0.8, ease: "power4.inOut" }, "-=0.1")
-                .to("#preloader", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, "-=0.5")
-                .from("#hero header, #hero h1, #hero p, #hero .glass-card, #hero .border-primaryYellow", {
-                    y: 30, opacity: 0, duration: 1.0, stagger: 0.08, ease: "power3.out"
-                }, "-=0.2");
+                .to("#preloader", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, "-=0.5");
             } else {
                 preloaderTl.to("#preloader", { opacity: 0, duration: 0.3 });
             }
         };
 
-        // Verifica se o window já está carregado (ex: cache rápido) ou escuta o evento load
+        // Verifica se o window já está carregado ou escuta o evento load
         if (document.readyState === 'complete') {
             finishLoading();
         } else {
             window.addEventListener('load', finishLoading);
-            // Timeout de segurança para evitar travamentos (ex: scripts externos lentos)
+            // Timeout de segurança para evitar travamentos
             setTimeout(finishLoading, 3000);
         }
 

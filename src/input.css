@@ -32,7 +32,7 @@ body {
     *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-.bg-hero { background: url('../images/HOME-HERO_2x.webp') center/cover no-repeat #111; }
+.bg-hero { background: url('../images/HOME-HERO_1x.webp') center/cover no-repeat #111; }
 .glass-card { background: rgba(10, 10, 10, 0.45); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
 
 .curtain {
