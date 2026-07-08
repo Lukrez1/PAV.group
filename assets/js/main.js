@@ -77,13 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         opacity: 0,
                         duration: 0.1
                     }, "-=0.1");
-
-                // Animação de entrada do Hero (Somente Desktop >= 768px)
-                if (window.innerWidth >= 768) {
-                    preloaderTl.from("#hero header, #hero h1, #hero p, #hero .glass-card, #hero .border-primaryYellow", {
-                        y: 30, opacity: 0, duration: 1.2, stagger: 0.1, ease: "power3.out"
-                    }, "-=0.6");
-                }
             } else {
                 preloaderTl.to("#preloader, #preloader-content", { opacity: 0, duration: 0.3 });
             }
