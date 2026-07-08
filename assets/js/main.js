@@ -120,12 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const titleContainerS3 = document.getElementById("projects-title");
         titleContainerS3.innerHTML = titleStrS3.split("").map(char => char === " " ? `<span class="char">&nbsp;</span>` : `<span class="char">${char}</span>`).join("");
 
-        gsap.fromTo("#projects-title .char", 
-            { opacity: 0, filter: "blur(16px)" },
-            { opacity: 1, filter: "blur(0px)", stagger: 0.1, ease: "none",
-              scrollTrigger: { trigger: "#section3", start: "top 80%", end: "top 30%", scrub: 1 }
-            }
-        );
+        // Animado de forma responsiva dentro de gsap.matchMedia()
 
         gsap.to(".s3-line", {
             y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power4.out",
@@ -145,6 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- DESKTOP (Grid 2x2 Clássico) ---
         mm.add("(min-width: 768px)", () => {
+            // Título com blur no desktop (GPU amigável em telas maiores)
+            gsap.fromTo("#projects-title .char", 
+                { opacity: 0, filter: "blur(16px)" },
+                { opacity: 1, filter: "blur(0px)", stagger: 0.1, ease: "none",
+                  scrollTrigger: { trigger: "#section3", start: "top 80%", end: "top 30%", scrub: 1 }
+                }
+            );
+
             const s4Tl = gsap.timeline({
                 scrollTrigger: { trigger: "#section4", start: "top top", end: "+=500%", scrub: 1, pin: true }
             });
@@ -191,19 +194,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 4. Esconde os fundos dos cards (agora ocultos pela máscara branca)
                 .to(".s4-card", { opacity: 0, duration: 0.1 }, "collapse+=1.6")
 
-                // 5. Expande a máscara branca para cobrir a tela inteira
-                .to("#white-rect", { width: "100vw", maxWidth: "100vw", height: "100vh", borderRadius: "0px", duration: 2.0, ease: "power3.inOut" }, "expand")
+                // 5. Expande a máscara branca para cobrir a tela inteira (footer)
+                .to("#white-rect", { 
+                    width: "100vw", 
+                    maxWidth: "100vw", 
+                    height: "100vh", 
+                    maxHeight: "100vh", 
+                    minHeight: "100vh",
+                    borderRadius: "0px", 
+                    duration: 2.0, 
+                    ease: "power3.inOut" 
+                }, "expand")
                 
                 .to("#footer-wrapper", { autoAlpha: 1, duration: 0.1, pointerEvents: "auto" }, "expand+=1.4")
                 .fromTo(".footer-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.4")
                 .fromTo(".footer-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
                 .fromTo(".footer-btns", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
                 .fromTo(".footer-legal", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
-                .to({}, { duration: 0.5 }); 
+                .to({}, { duration: 1.5 }); // Aumentado para 1.5s de buffer de scroll para evitar rubber-band shrink no desktop
         });
 
         // --- MOBILE (Cascata Vertical Centralizada e Sequencial) ---
         mm.add("(max-width: 767px)", () => {
+            // Título simplificado no mobile: sem blur/GPU pesado para evitar crashes/reloads
+            gsap.fromTo("#projects-title .char", 
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, stagger: 0.05, ease: "power2.out",
+                  scrollTrigger: { trigger: "#section3", start: "top 85%", end: "top 55%", scrub: 1 }
+                }
+            );
+
             gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
             gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 }); 
             
@@ -213,66 +233,69 @@ document.addEventListener("DOMContentLoaded", () => {
             gsap.set("#card-04", { zIndex: 10 });
 
             const s4TlMobile = gsap.timeline({
-                scrollTrigger: { trigger: "#section4", start: "top top", end: "+=600%", scrub: 1, pin: true }
+                scrollTrigger: { trigger: "#section4", start: "top top", end: "+=350%", scrub: 1, pin: true }
             });
 
-            s4TlMobile.to({}, { duration: 0.3 }) 
+            s4TlMobile
             // Texto do Card-01 entra suave no início
-            .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
+            .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" })
 
-            // S1: Card-01 sobe e Card-02 entra. Texto do Card-01 apaga (número continua!)
-            .to("#card-01 .s4-text", { opacity: 0, duration: 0.4 }, "s1")
-            .to("#card-01", { yPercent: -110, duration: 1.2, ease: "power2.inOut" }, "s1")
-            .to("#card-02", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s1+=0.2") 
-            .to("#card-02", { yPercent: 10, duration: 1.2, ease: "power2.inOut" }, "s1")
+            // S1: Começa a subir. Texto do Card-01 apaga (número continua visível!)
+            .to("#card-01 .s4-text", { opacity: 0, duration: 0.3 }, "s1")
+            .to("#card-01", { yPercent: -105, duration: 1.0, ease: "power2.inOut" }, "s1")
+            .to("#card-02", { autoAlpha: 1, duration: 0.6, ease: "power2.inOut" }, "s1+=0.1") 
+            .to("#card-02", { yPercent: 5, duration: 1.0, ease: "power2.inOut" }, "s1")
             // Quando S1 completa, texto do Card-02 surge
-            .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s1+=1.2")
+            .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "s1+=1.0")
 
-            .to({}, { duration: 0.3 }) 
-
-            // S2: Card-01 e 02 sobem mais para dar espaço para Card-03
-            .to("#card-02 .s4-text", { opacity: 0, duration: 0.4 }, "s2")
-            .to("#card-01", { yPercent: -220, duration: 1.2, ease: "power2.inOut" }, "s2")
-            .to("#card-02", { yPercent: -100, duration: 1.2, ease: "power2.inOut" }, "s2")
-            .to("#card-03", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s2+=0.2") 
-            .to("#card-03", { yPercent: 20, duration: 1.2, ease: "power2.inOut" }, "s2")
+            // S2: Começa a subir. Texto do Card-02 apaga (número continua visível!)
+            .to("#card-02 .s4-text", { opacity: 0, duration: 0.3 }, "s2")
+            .to("#card-01", { yPercent: -215, duration: 1.0, ease: "power2.inOut" }, "s2")
+            .to("#card-02", { yPercent: -105, duration: 1.0, ease: "power2.inOut" }, "s2")
+            .to("#card-03", { autoAlpha: 1, duration: 0.6, ease: "power2.inOut" }, "s2+=0.1") 
+            .to("#card-03", { yPercent: 5, duration: 1.0, ease: "power2.inOut" }, "s2")
             // Quando S2 completa, texto do Card-03 surge
-            .to("#card-03 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s2+=1.2")
+            .to("#card-03 .s4-text", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "s2+=1.0")
 
-            .to({}, { duration: 0.3 }) 
-
-            // S3: Card-01, 02 e 03 sobem mais para dar espaço para Card-04
-            .to("#card-03 .s4-text", { opacity: 0, duration: 0.4 }, "s3")
-            .to("#card-01", { yPercent: -330, duration: 1.2, ease: "power2.inOut" }, "s3")
-            .to("#card-02", { yPercent: -210, duration: 1.2, ease: "power2.inOut" }, "s3")
-            .to("#card-03", { yPercent: -90, duration: 1.2, ease: "power2.inOut" }, "s3")
-            .to("#card-04", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s3+=0.2") 
-            .to("#card-04", { yPercent: 30, duration: 1.2, ease: "power2.inOut" }, "s3")
+            // S3: Começa a subir. Texto do Card-03 apaga (número continua visível!)
+            .to("#card-03 .s4-text", { opacity: 0, duration: 0.3 }, "s3")
+            .to("#card-01", { yPercent: -325, duration: 1.0, ease: "power2.inOut" }, "s3")
+            .to("#card-02", { yPercent: -215, duration: 1.0, ease: "power2.inOut" }, "s3")
+            .to("#card-03", { yPercent: -105, duration: 1.0, ease: "power2.inOut" }, "s3")
+            .to("#card-04", { autoAlpha: 1, duration: 0.6, ease: "power2.inOut" }, "s3+=0.1") 
+            .to("#card-04", { yPercent: 5, duration: 1.0, ease: "power2.inOut" }, "s3")
             // Quando S3 completa, texto do Card-04 surge
-            .to("#card-04 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s3+=1.2")
+            .to("#card-04 .s4-text", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "s3+=1.0")
 
-            .to({}, { duration: 1.0 }) 
-
-            // 1. Colapsa os cards primeiro no centro (todos em yPercent: -50, informações e números ainda visíveis)
-            .to(".s4-card", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "collapse")
-            .to("#card-02, #card-03, #card-04", { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, "collapse+=0.4")
+            // 1. Colapsa os cards primeiro no centro (todos vão para yPercent: -50, informações e números ainda visíveis)
+            .to(".s4-card", { yPercent: -50, duration: 1.0, ease: "power2.inOut" }, "collapse")
+            .to("#card-02, #card-03, #card-04", { autoAlpha: 0, duration: 0.5, ease: "power2.out" }, "collapse+=0.3")
 
             // 2. APÓS o colapso, apaga as informações e números
-            .to([".s4-text", ".s4-num"], { opacity: 0, duration: 0.4, ease: "power2.in" }, "collapse+=1.2")
+            .to([".s4-text", ".s4-num"], { opacity: 0, duration: 0.3, ease: "power2.in" }, "collapse+=1.0")
             
-            // 3. Simultaneamente, mostra a máscara branca (#white-rect) no tamanho exato do card
-            .to("#white-rect", { autoAlpha: 1, duration: 0.1 }, "collapse+=1.2")
-            .to("#card-01", { autoAlpha: 0, duration: 0.4 }, "collapse+=1.2")
+            // 3. Simultaneamente, mostra a máscara branca (#white-rect) no tamanho exato do card e esconde os fundos dos cards
+            .to("#white-rect", { autoAlpha: 1, duration: 0.3 }, "collapse+=1.0")
+            .to(".s4-card", { autoAlpha: 0, duration: 0.3 }, "collapse+=1.0")
 
             // 4. Expande a máscara branca para cobrir a tela inteira
-            .to("#white-rect", { width: "100vw", maxWidth: "100vw", height: "100vh", maxHeight: "100vh", borderRadius: "0px", duration: 1.5, ease: "power3.inOut" }, "expand")
+            .to("#white-rect", { 
+                width: "100vw", 
+                maxWidth: "100vw", 
+                height: "100vh", 
+                maxHeight: "100vh", 
+                minHeight: "100vh",
+                borderRadius: "0px", 
+                duration: 1.5, 
+                ease: "power3.inOut" 
+            }, "expand")
 
             .to("#footer-wrapper", { autoAlpha: 1, duration: 0.1, pointerEvents: "auto" }, "expand+=1.0")
             .fromTo(".footer-title", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expand+=1.0")
             .fromTo(".footer-btns", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expand+=1.1")
             .fromTo(".footer-logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expand+=1.2")
             .fromTo(".footer-legal", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expand+=1.2")
-            .to({}, { duration: 0.5 });
+            .to({}, { duration: 1.5 }); // Aumentado para 1.5s de buffer de scroll para evitar rubber-band shrink no mobile
         });
     }
 });

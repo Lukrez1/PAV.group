@@ -14,10 +14,15 @@
     
     <style>
         @media (max-width: 767px) {
-            .s4-card, #white-rect {
+            .s4-card {
                 height: 35vh !important;
                 min-height: 240px !important;
                 max-height: 320px !important;
+            }
+            #white-rect {
+                height: 35vh;
+                min-height: 240px;
+                max-height: 320px;
             }
         }
     </style>
@@ -70,10 +75,17 @@
                             <img id="header-logo" src="assets/images/LOGO.svg" alt="PAV Group Logo" width="139" height="32" class="h-6 md:h-8" style="opacity: 0;">
                         </a>
                         <!-- Botão de CTA da nav principal visível apenas em Desktop (>= 768px). Menu hambúrguer mobile removido para simplificação. -->
-                        <a href="#sprint" class="hidden md:flex bg-black hover:bg-zinc-900 transition-colors border border-white/20 text-white text-sm font-light py-2 px-3 pl-5 rounded-full items-center gap-3 group focus-visible:ring-2 focus-visible:ring-white">
-                            Aplicar para Sprint
-                            <span class="bg-white text-black rounded-full p-1.5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        <a href="#sprint" class="group relative overflow-hidden hidden md:flex bg-black hover:bg-white text-white hover:text-black border border-white/20 hover:border-black/20 text-sm font-light py-2 px-3 rounded-full items-center gap-3 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-white">
+                            <!-- Left Circle (visible on hover) -->
+                            <span class="bg-white group-hover:bg-black text-black group-hover:text-white w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 scale-0 opacity-0 max-w-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 group-hover:max-w-[28px] group-hover:mr-1">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </span>
+                            
+                            <span class="transition-colors duration-300">Aplicar para Sprint</span>
+                            
+                            <!-- Right Circle (hidden on hover) -->
+                            <span class="bg-white text-black w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 scale-100 opacity-100 max-w-[28px] transition-all duration-300 group-hover:scale-0 group-hover:opacity-0 group-hover:max-w-0 group-hover:ml-0 ml-1">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                             </span>
                         </a>
                     </nav>
@@ -121,10 +133,17 @@
 
                             <!-- CTAs Mobile (Exibidos diretamente no mobile abaixo do texto, invisíveis no desktop) -->
                             <div class="flex md:hidden flex-col gap-3 w-full mt-6 max-w-[280px] mx-auto">
-                                <a href="#sprint" class="bg-white hover:bg-zinc-200 text-black text-xs font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                                    Aplicar para Sprint
-                                    <span class="bg-black text-white rounded-full p-1.5 flex items-center justify-center">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                <a href="#sprint" class="group relative overflow-hidden bg-white hover:bg-black text-black hover:text-white border border-transparent hover:border-white/40 text-xs font-semibold py-2 px-3 rounded-full flex items-center justify-center gap-3 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] h-[48px]">
+                                    <!-- Left Circle (visible on hover) -->
+                                    <span class="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 scale-0 opacity-0 max-w-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 group-hover:max-w-[32px] group-hover:mr-1">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                    </span>
+                                    
+                                    <span class="transition-colors duration-300">Aplicar para Sprint</span>
+                                    
+                                    <!-- Right Circle (hidden on hover) -->
+                                    <span class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 scale-100 opacity-100 max-w-[32px] transition-all duration-300 group-hover:scale-0 group-hover:opacity-0 group-hover:max-w-0 group-hover:ml-0 ml-1">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                                     </span>
                                 </a>
                                 <a href="https://wa.me/5581999999999" target="_blank" rel="noopener noreferrer" class="bg-black/40 hover:bg-black/60 border border-white/20 text-white text-xs font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-md">
