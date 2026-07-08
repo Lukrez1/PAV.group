@@ -18,41 +18,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
         lenis.stop();
         
-        // Finalização assíncrona do Preloader (Estático na Hero)
+        // Mede e posiciona o logo do preloader no início (antes do window load)
+        const headerLogo = document.getElementById('header-logo');
+        const preloaderLogo = document.getElementById('preloader-logo');
+        if (headerLogo && preloaderLogo) {
+            const headerRect = headerLogo.getBoundingClientRect();
+            
+            // Posiciona o logo do preloader exatamente na coordenada do logo do header
+            gsap.set(preloaderLogo, {
+                left: headerRect.left,
+                top: headerRect.top,
+                width: headerRect.width,
+                height: headerRect.height,
+                transformOrigin: window.innerWidth >= 768 ? "left top" : "center top"
+            });
+
+            // Escala inicial de 50% da largura do desktop ou 80% do mobile
+            const targetWidth = window.innerWidth * (window.innerWidth >= 768 ? 0.5 : 0.8);
+            const initialScale = targetWidth / headerRect.width;
+            
+            gsap.set(preloaderLogo, {
+                scale: initialScale
+            });
+        }
+        
+        // Finalização assíncrona do Preloader (De baixo para cima, escala o logo até 1)
         const finishLoading = () => {
             if (window.__preloaderFinished) return;
             window.__preloaderFinished = true;
             
-            // Limpa o temporizador da simulação vanilla
-            if (window.__preloaderInterval) {
-                clearInterval(window.__preloaderInterval);
-            }
-            
-            const counterVal = { val: window.__preloaderCount || 0 };
             const preloaderTl = gsap.timeline({
                 onComplete: () => {
                     const preloader = document.getElementById('preloader');
+                    const preloaderContent = document.getElementById('preloader-content');
                     if (preloader) preloader.style.display = 'none';
+                    if (preloaderContent) preloaderContent.style.display = 'none';
+                    gsap.set("#header-logo", { opacity: 1 });
                     lenis.start();
                     ScrollTrigger.refresh(); 
                 }
             });
 
             if (!prefersReducedMotion) {
-                preloaderTl.to(counterVal, {
-                    val: 100, 
-                    duration: 0.4, 
-                    ease: "power2.out",
-                    onUpdate: () => {
-                        const counterEl = document.getElementById("preloader-counter");
-                        if (counterEl) counterEl.innerText = Math.round(counterVal.val) + "%";
-                    }
-                })
-                .to("#preloader-counter", { opacity: 0, y: -10, duration: 0.2, ease: "power1.in" })
-                .to("#preloader-logo", { scale: 30, opacity: 0, duration: 0.8, ease: "power4.inOut" }, "-=0.1")
-                .to("#preloader", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, "-=0.5");
+                preloaderTl
+                    // Anima o logo voltando para a escala original (1x)
+                    .to("#preloader-logo", {
+                        scale: 1,
+                        duration: 1.2,
+                        ease: "power3.inOut"
+                    })
+                    // Desliza o background preto de baixo para cima (yPercent: -100)
+                    .to("#preloader", {
+                        yPercent: -100,
+                        duration: 1.2,
+                        ease: "power3.inOut"
+                    }, "<")
+                    .to("#preloader-logo", {
+                        opacity: 0,
+                        duration: 0.1
+                    }, "-=0.1");
+
+                // Animação de entrada do Hero (Somente Desktop >= 768px)
+                if (window.innerWidth >= 768) {
+                    preloaderTl.from("#hero header, #hero h1, #hero p, #hero .glass-card, #hero .border-primaryYellow", {
+                        y: 30, opacity: 0, duration: 1.2, stagger: 0.1, ease: "power3.out"
+                    }, "-=0.6");
+                }
             } else {
-                preloaderTl.to("#preloader", { opacity: 0, duration: 0.3 });
+                preloaderTl.to("#preloader, #preloader-content", { opacity: 0, duration: 0.3 });
             }
         };
 

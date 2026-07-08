@@ -20,10 +20,12 @@
 </head>
 <body>
 
-    <!-- PRELOADER -->
-    <div id="preloader" class="fixed inset-0 z-[90] bg-black flex flex-col items-center justify-center" aria-hidden="true">
-        <img id="preloader-logo" src="assets/images/Vector.svg" alt="" width="68" height="64" class="h-12 md:h-16 mb-4 object-contain will-change-transform">
-        <div id="preloader-counter" class="text-white/80 font-medium text-xl md:text-2xl tracking-tight">0%</div>
+    <!-- PRELOADER BACKGROUND (Slides up to reveal the page) -->
+    <div id="preloader" class="fixed inset-0 z-[90] bg-black" aria-hidden="true"></div>
+
+    <!-- PRELOADER CONTENT (Translates and scales logo to the header location) -->
+    <div id="preloader-content" class="fixed inset-0 z-[95] pointer-events-none" aria-hidden="true">
+        <img id="preloader-logo" src="assets/images/PAV.png" alt="PAV" class="invert absolute will-change-transform">
     </div>
     
     <!-- Script de Simulação Inicial Vanilla (Assíncrono e Imediato) -->
@@ -50,50 +52,96 @@
             
             <!-- SESSÃO 1 -->
             <section id="hero" class="absolute inset-0 w-full h-full flex flex-col bg-hero z-10 overflow-hidden">
+                
+                <!-- HEADER (Comporte responsivo: Linha divisória e categorias apenas no Desktop) -->
                 <header class="w-full px-6 md:px-16 pt-8 pb-4 relative z-20">
-                    <nav class="flex justify-between items-center w-full" aria-label="Navegação Principal">
+                    <nav class="flex justify-center md:justify-between items-center w-full relative" aria-label="Navegação Principal">
                         <a href="#" class="block hover:opacity-80 transition-opacity" aria-label="Página Inicial">
-                            <img src="assets/images/LOGO.svg" alt="PAV Group Logo" width="139" height="32" class="h-6 md:h-8">
+                            <img id="header-logo" src="assets/images/PAV.png" alt="PAV Logo" class="invert h-6 md:h-8" style="opacity: 0;">
                         </a>
-                        <!-- Menu toggle (hambúrguer) e botão do desktop removidos para simplificação do fluxo direto de botões -->
+                        <!-- Botão de CTA da nav principal visível apenas em Desktop (>= 768px). Menu hambúrguer mobile removido para simplificação. -->
+                        <a href="#sprint" class="hidden md:flex bg-black hover:bg-zinc-900 transition-colors border border-white/20 text-white text-sm font-light py-2 px-3 pl-5 rounded-full items-center gap-3 group focus-visible:ring-2 focus-visible:ring-white">
+                            Aplicar para Sprint
+                            <span class="bg-white text-black rounded-full p-1.5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </span>
+                        </a>
                     </nav>
+                    
+                    <!-- Horizontal Line & Subheader (Apenas Desktop) -->
+                    <div class="hidden md:block w-full h-px bg-white/30 mt-6 mb-6" aria-hidden="true"></div>
+
+                    <div class="hidden md:flex flex-col md:flex-row justify-between items-start gap-8">
+                        <div class="text-white/70 text-xs md:text-sm font-light tracking-wide leading-relaxed" aria-hidden="true">
+                            / POSICIONAMENTO DE OFERTA<br>
+                            / PÁGINAS DE VENDA<br>
+                            / DIRECIONAMENTO VISUAL
+                        </div>
+                        <div class="md:w-1/3 max-w-[420px]">
+                            <p class="text-white/90 text-sm md:text-base font-light text-justify leading-relaxed indent-8">
+                                Transformamos a sua página de vendas em uma experiência clara, persuasiva e pronta para converter, em uma única sprint.
+                            </p>
+                        </div>
+                    </div>
                 </header>
 
-                <div class="flex-grow flex flex-col justify-end w-full px-6 md:px-16 pb-12 md:pb-16 relative z-10">
-                    <div class="max-w-4xl flex flex-col items-start gap-4 md:gap-6">
-                        <!-- Categorias de Posicionamento -->
-                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 text-white/50 text-[10px] md:text-xs font-semibold tracking-[0.12em] uppercase border-l-[3px] border-primaryYellow pl-3" aria-hidden="true">
-                            <span>/ Posicionamento de Oferta</span>
-                            <span class="hidden sm:inline">•</span>
-                            <span>/ Páginas de Venda</span>
-                            <span class="hidden sm:inline">•</span>
-                            <span>/ Direcionamento Visual</span>
+                <!-- CORPO DA SEÇÃO 1 (Estrutura Restaurada para total segurança no Desktop, Otimizada no Mobile) -->
+                <div class="flex-grow flex flex-col justify-end w-full px-6 md:px-16 pb-16 md:pb-12 relative z-10">
+                    <div class="flex flex-col lg:flex-row justify-between items-center md:items-end gap-10 lg:gap-4 w-full">
+                        
+                        <div class="w-full lg:w-3/5 flex flex-col items-center md:items-start text-center md:text-left">
+                            <!-- Badge original restaurado em ambos -->
+                            <div class="bg-black/60 border-l-[3px] border-primaryYellow inline-block px-3 py-1.5 mb-6" aria-hidden="true">
+                                <span class="text-white/80 text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase">
+                                    MOLDAMOS VALOR EM CONVERSÃO
+                                </span>
+                            </div>
+                            
+                            <!-- Título Principal (Bigger on mobile: text-[36px] sm:text-[44px]) -->
+                            <h1 class="text-[36px] sm:text-[44px] md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight text-white max-w-[320px] md:max-w-none mx-auto md:mx-0">
+                                Nós lapidamos ofertas<br class="hidden md:block">
+                                para que elas <strong class="font-bold">vendam</strong><br class="hidden md:block">
+                                com clareza.
+                            </h1>
+
+                            <!-- Subtexto descritivo Mobile -->
+                            <p class="md:hidden text-white/70 text-xs sm:text-sm font-light leading-relaxed mt-6 max-w-[280px] mx-auto">
+                                Transformamos a sua página de vendas em uma experiência clara, persuasiva e pronta para converter, em uma única sprint.
+                            </p>
+
+                            <!-- CTAs Mobile (Exibidos diretamente no mobile abaixo do texto, invisíveis no desktop) -->
+                            <div class="flex md:hidden flex-col gap-3 w-full mt-6 max-w-[280px] mx-auto">
+                                <a href="#sprint" class="bg-white hover:bg-zinc-200 text-black text-xs font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                                    Aplicar para Sprint
+                                    <span class="bg-black text-white rounded-full p-1.5 flex items-center justify-center">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                    </span>
+                                </a>
+                                <a href="https://wa.me/5581999999999" target="_blank" rel="noopener noreferrer" class="bg-black/40 hover:bg-black/60 border border-white/20 text-white text-xs font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-md">
+                                    Falar com Joel no WhatsApp
+                                    <span class="bg-primaryYellow text-black rounded-full p-1.5 flex items-center justify-center">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                    </span>
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- Título Principal -->
-                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight text-white max-w-3xl">
-                            Nós lapidamos ofertas para que elas <strong class="font-bold text-white">vendam</strong> com clareza.
-                        </h1>
-
-                        <!-- Subtexto descritivo -->
-                        <p class="text-white/70 text-xs sm:text-sm md:text-base font-light leading-relaxed max-w-lg">
-                            Transformamos a sua página de vendas em uma experiência clara, persuasiva e pronta para converter, em uma única sprint.
-                        </p>
-
-                        <!-- Grupo de CTAs -->
-                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-2">
-                            <a href="#sprint" class="bg-white hover:bg-zinc-200 text-black text-xs md:text-sm font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                                Aplicar para Sprint
-                                <span class="bg-black text-white rounded-full p-1.5 flex items-center justify-center">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                </span>
-                            </a>
-                            <a href="https://wa.me/5581999999999" target="_blank" rel="noopener noreferrer" class="bg-black/40 hover:bg-black/60 border border-white/20 text-white text-xs md:text-sm font-semibold py-3.5 px-6 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-md">
-                                Falar com Joel no WhatsApp
-                                <span class="bg-primaryYellow text-black rounded-full p-1.5 flex items-center justify-center">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                                </span>
-                            </a>
+                        <!-- Card do Joel na Hero (Somente Desktop) -->
+                        <div class="hidden md:flex w-full lg:w-auto justify-start lg:justify-end">
+                            <div class="glass-card rounded-2xl p-2.5 flex items-center gap-5 max-w-[420px] shadow-2xl">
+                                <div class="w-[120px] h-[160px] flex-shrink-0 overflow-hidden bg-zinc-800 rounded-xl relative">
+                                    <img src="assets/images/FOTO_2x.webp" alt="Foto Joel Vieira" width="120" height="160" loading="lazy" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90 absolute inset-0">
+                                </div>
+                                <div class="flex flex-col justify-center pr-4">
+                                    <img src="assets/images/Vector.svg" alt="" aria-hidden="true" width="17" height="16" class="h-4 w-auto mb-3 opacity-80 object-contain self-start">
+                                    <h3 class="text-white font-semibold text-base">Fale com Joel</h3>
+                                    <p class="text-white/60 text-xs font-light mb-4">Founder da PAV.group</p>
+                                    <a href="#contato" class="bg-white hover:bg-zinc-200 transition-transform hover:scale-105 active:scale-95 text-black text-[11px] font-semibold py-2 px-4 rounded-full flex items-center justify-between gap-3 w-fit focus-visible:ring-2 focus-visible:ring-primaryYellow">
+                                        Entrar em contato
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="opacity-80"><circle cx="12" cy="12" r="10"></circle><path d="m10 8 4 4-4 4"></path></svg>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,7 +224,7 @@
                 <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-2xl md:rounded-3xl p-5 md:p-10 flex flex-col justify-between overflow-hidden">
                     <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
                         <h3 class="text-lg md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Diagnóstico<br>da oferta</h3>
-                        <p class="text-black/60 font-light text-[11px] md:text-sm lg:text-base leading-relaxed max-w-[280px]">Antes de desenhar, abro sua oferta como um raio-x para identificar adjustments e pontos de melhoria na comunicação.</p>
+                        <p class="text-black/60 font-light text-[11px] md:text-sm lg:text-base leading-relaxed max-w-[280px]">Antes de desenhar, abro sua oferta como um raio-x para identify adjustments e pontos de melhoria na comunicação.</p>
                     </div>
                     <div class="s4-num absolute bottom-2 right-4 md:bottom-8 md:right-10 text-[60px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter" aria-hidden="true">01</div>
                 </div>
