@@ -24,18 +24,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (headerLogo && preloaderLogo) {
             const headerRect = headerLogo.getBoundingClientRect();
             
-            // Posiciona o logo do preloader exatamente na coordenada do logo do header
+            // Define a altura base para coincidir com a do header e mantém o aspect ratio
             gsap.set(preloaderLogo, {
-                left: headerRect.left,
-                top: headerRect.top,
-                width: headerRect.width,
                 height: headerRect.height,
+                width: "auto"
+            });
+
+            // Mede a largura resultante para alinhar perfeitamente
+            const preloaderRect = preloaderLogo.getBoundingClientRect();
+            let leftPos;
+            if (window.innerWidth >= 768) {
+                // No desktop: alinha à esquerda (junto com o início das letras PAV)
+                leftPos = headerRect.left;
+            } else {
+                // No mobile: alinha o ponto central horizontal
+                leftPos = (headerRect.left + headerRect.width / 2) - (preloaderRect.width / 2);
+            }
+
+            gsap.set(preloaderLogo, {
+                left: leftPos,
+                top: headerRect.top,
                 transformOrigin: window.innerWidth >= 768 ? "left top" : "center top"
             });
 
             // Escala inicial de 50% da largura do desktop ou 80% do mobile
             const targetWidth = window.innerWidth * (window.innerWidth >= 768 ? 0.5 : 0.8);
-            const initialScale = targetWidth / headerRect.width;
+            const initialScale = targetWidth / preloaderRect.width;
             
             gsap.set(preloaderLogo, {
                 scale: initialScale
