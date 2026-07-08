@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAV Group - Moldamos Valor em Conversão</title>
+    <meta name="description" content="Nós lapidamos ofertas para que elas vendam com clareza. Posicionamento de oferta, páginas de vendas e direcionamento visual.">
+    
+    <!-- Pré-carregamento de Assets Críticos -->
+    <link rel="preload" href="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/HOME-HERO_2x.webp" as="image">
+    
+    <!-- Google Fonts: Sora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & Lenis (Deferidos para não bloquear renderização inicial) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sora: ['Sora', 'sans-serif'] },
+                    colors: { primaryYellow: '#E3B737' }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* BASE & ACESSIBILIDADE */
+        /* Adicionado CSS base oficial do Lenis para evitar conflitos de rolagem nativa */
+        html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-smooth iframe { pointer-events: none; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Melhora o foco do teclado para acessibilidade */
+        *:focus-visible {
+            outline: 2px solid #E3B737;
+            outline-offset: 4px;
+        }
+
+        /* OTIMIZAÇÃO: Animações reduzidas para usuários com sensibilidade */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        
+        /* SEÇÕES & COMPONENTES */
+        .bg-hero {
+            background: url('https://raw.githubusercontent.com/Lukrez1/PAV.group/main/HOME-HERO_2x.webp') center/cover no-repeat #111;
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .curtain {
+            width: calc(100% / 9); /* Ajustado para 9 retângulos */
+            height: 100%;
+            background-color: #000;
+            transform-origin: top;
+            transform: scaleY(0);
+            will-change: transform;
+        }
+
+        .char, .word {
+            display: inline-block;
+            will-change: filter, opacity, transform;
+        }
+
+        /* PERFORMANCE: clip-path é processado na GPU, evitando reflow do DOM */
+        .portfolio-card {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+            clip-path: inset(0 50% 0 50% round 40px); /* Começa exatamente do centro invisível */
+            will-change: clip-path;
+        }
+
+        /* --- Estilos da Seção 4 (Método PAV) --- */
+        /* Usando vw para responsividade perfeita da grade */
+        .s4-card {
+            position: absolute;
+            width: 44vw;
+            max-width: 480px;
+            aspect-ratio: 1.1;
+            top: 50%;
+            left: 50%;
+            /* O transform real será controlado pelo GSAP (xPercent, yPercent) */
+            will-change: transform, opacity;
+        }
+        
+        #white-rect {
+            position: absolute;
+            width: 44vw;
+            max-width: 480px;
+            aspect-ratio: 1.1;
+            border-radius: 12px;
+            background-color: #ffffff;
+            top: 50%;
+            left: 50%;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            /* width/height animados aqui de forma isolada não afetam o resto do DOM */
+            will-change: transform, width, height, border-radius, opacity;
+        }
+
+        @media (min-width: 768px) {
+            .s4-card, #white-rect {
+                aspect-ratio: 4/3;
+            }
+            #white-rect {
+                border-radius: 16px; /* Menor border-radius conforme solicitado */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center" aria-hidden="true">
+        <img id="preloader-logo" src="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/Vector.svg" alt="" class="h-12 md:h-16 mb-4 object-contain will-change-transform">
+        <div id="preloader-counter" class="text-white/80 font-medium text-xl md:text-2xl tracking-tight">0%</div>
+    </div>
+
+    <main id="smooth-wrapper">
+        
+        <div id="pin-master" class="relative w-full h-screen">
+            
+            <!-- SESSÃO 1 (HERO) -->
+            <section id="hero" class="absolute inset-0 w-full h-full flex flex-col bg-hero z-10 overflow-hidden" aria-label="Introdução">
+                
+                <header class="w-full px-6 md:px-16 pt-8 pb-4 relative z-10">
+                    <nav class="flex justify-between items-center w-full" aria-label="Navegação Principal">
+                        <a href="#" class="block hover:opacity-80 transition-opacity" aria-label="Página Inicial">
+                            <img src="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/LOGO.svg" alt="PAV Group Logo" class="h-6 md:h-8">
+                        </a>
+
+                        <a href="#sprint" class="bg-black hover:bg-zinc-900 transition-colors border border-white/20 text-white text-sm font-light py-2 px-3 pl-5 rounded-full flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-white">
+                            Aplicar para Sprint
+                            <span class="bg-white text-black rounded-full p-1.5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </span>
+                        </a>
+                    </nav>
+                    
+                    <div class="w-full h-px bg-white/30 mt-6 mb-6" aria-hidden="true"></div>
+
+                    <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                        <div class="text-white/70 text-xs md:text-sm font-light tracking-wide leading-relaxed" aria-hidden="true">
+                            / POSICIONAMENTO DE OFERTA<br>
+                            / PÁGINAS DE VENDA<br>
+                            / DIRECIONAMENTO VISUAL
+                        </div>
+                        <div class="md:w-1/3 max-w-[420px]">
+                            <p class="text-white/90 text-sm md:text-base font-light text-justify leading-relaxed indent-8">
+                                Transformamos a sua página de vendas em uma experiência clara, persuasiva e pronta para converter, em uma única sprint.
+                            </p>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="flex-grow flex flex-col justify-end w-full px-6 md:px-16 pb-12 relative z-10">
+                    <div class="flex flex-col lg:flex-row justify-between items-end gap-10 lg:gap-4 w-full">
+                        
+                        <div class="w-full lg:w-3/5">
+                            <div class="bg-black/60 border-l-[3px] border-primaryYellow inline-block px-3 py-1.5 mb-6" aria-hidden="true">
+                                <span class="text-white/80 text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase">
+                                    MOLDAMOS VALOR EM CONVERSÃO
+                                </span>
+                            </div>
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight text-white">
+                                Nós lapidamos ofertas<br>
+                                para que elas <strong class="font-bold">vendam</strong><br>
+                                com clareza.
+                            </h1>
+                        </div>
+
+                        <!-- Card Founder (Melhoria de CRO: Call to Action mais acessível) -->
+                        <div class="w-full lg:w-auto flex justify-start lg:justify-end">
+                            <div class="glass-card rounded-2xl p-2.5 flex items-center gap-5 max-w-sm md:max-w-[420px] shadow-2xl">
+                                <div class="w-28 h-36 md:w-[120px] md:h-[160px] flex-shrink-0 overflow-hidden bg-zinc-800 rounded-xl relative">
+                                    <img src="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/FOTO_2x.webp" alt="Foto de Joel Vieira, Founder" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90 absolute inset-0">
+                                </div>
+                                
+                                <div class="flex flex-col justify-center pr-4">
+                                    <img src="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/Vector.svg" alt="" aria-hidden="true" class="h-3 md:h-4 w-auto mb-3 opacity-80 object-contain self-start">
+                                    <h3 class="text-white font-semibold text-sm md:text-base">Fale com Joel</h3>
+                                    <p class="text-white/60 text-[10px] md:text-xs font-light mb-4">Founder da PAV.group</p>
+                                    
+                                    <a href="#contato" class="bg-white hover:bg-zinc-200 transition-transform hover:scale-105 active:scale-95 text-black text-[11px] font-semibold py-2 px-4 rounded-full flex items-center justify-between gap-3 w-fit focus-visible:ring-2 focus-visible:ring-primaryYellow">
+                                        Entrar em contato
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="opacity-80">
+                                            <circle cx="12" cy="12" r="10"></circle><path d="m10 8 4 4-4 4"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SESSÃO 2 (TRANSIÇÃO) -->
+            <section id="section2" class="absolute inset-0 w-full h-full z-20 pointer-events-none overflow-hidden" aria-hidden="true">
+                <div class="absolute inset-0 flex w-full h-full z-0">
+                    <div class="curtain"></div><div class="curtain"></div><div class="curtain"></div>
+                    <div class="curtain"></div><div class="curtain"></div><div class="curtain"></div>
+                    <div class="curtain"></div><div class="curtain"></div><div class="curtain"></div>
+                </div>
+                
+                <div class="absolute inset-0 flex items-center justify-center z-10 px-6 md:px-16 lg:px-32">
+                    <div class="container mx-auto text-left">
+                        <h2 id="animated-text" class="text-white/80 text-4xl md:text-5xl lg:text-[64px] font-medium leading-[1.2] md:leading-[1.3] tracking-[-2px] max-w-6xl">
+                            <!-- JS divide as palavras aqui -->
+                        </h2>
+                    </div>
+                </div>
+            </section>
+
+        </div> 
+
+        <!-- SESSÃO 3 (PROJETOS) -->
+        <section id="section3" class="relative w-full bg-black pt-24 pb-[30vh] z-30 flex flex-col items-center" aria-label="Projetos Recentes">
+            
+            <div class="mb-20 text-center flex flex-col items-center px-6">
+                <div class="inline-block bg-clip-text text-transparent bg-gradient-to-r from-white to-[#999999]">
+                    <h2 id="projects-title" class="text-4xl md:text-5xl lg:text-[56px] font-normal mb-8 tracking-tight flex justify-center flex-wrap">
+                        <!-- JS divide letras aqui -->
+                    </h2>
+                </div>
+                <!-- Otimização UX: Texto aparecendo linha por linha usando overflow hidden -->
+                <p class="text-white/60 font-light text-base md:text-lg lg:text-[20px] max-w-2xl mx-auto text-center leading-relaxed flex flex-col gap-1">
+                    <span class="block overflow-hidden"><span class="s3-line block translate-y-full opacity-0">Cada projeto é pensado em tornar sua oferta única,</span></span>
+                    <span class="block overflow-hidden"><span class="s3-line block translate-y-full opacity-0">unindo diagnóstico, estratégia e desenvolvimento.</span></span>
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col gap-[24px] items-center" aria-hidden="true">
+                <!-- Usando clip-path para expansão livre de reflow -->
+                <div class="portfolio-card bg-[#D9D9D9]"></div>
+                <div class="portfolio-card bg-[#D9D9D9]"></div>
+                <div class="portfolio-card bg-[#D9D9D9]"></div>
+                <div class="portfolio-card bg-[#D9D9D9]"></div>
+            </div>
+        </section>
+
+        <!-- SESSÃO 4 (MÉTODO / COREOGRAFIA 2x2 & FOOTER FINAL) -->
+        <section id="section4" class="relative w-full h-screen bg-black overflow-hidden z-[40]" aria-label="Estrutura do Método PAV">
+            
+            <!-- Retângulo Branco de Saída -->
+            <div id="white-rect"></div>
+
+            <!-- FOOTER FINAL (Oculto, revelado na expansão do Retângulo Branco) -->
+            <footer id="footer-wrapper" class="absolute inset-0 z-[60] flex items-center justify-center opacity-0 invisible pointer-events-none">
+                <div class="w-full max-w-[1440px] px-6 md:px-16 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-16 lg:gap-8">
+                    
+                    <div class="flex flex-col gap-10 lg:gap-14 w-full lg:w-1/2">
+                        <!-- Filter para garantir o logo em preto profundo no fundo branco -->
+                        <img src="https://raw.githubusercontent.com/Lukrez1/PAV.group/main/LOGO.svg" alt="PAV Group" class="footer-logo w-full max-w-[280px] md:max-w-[380px] lg:max-w-[440px] object-contain brightness-0 mix-blend-multiply">
+                        
+                        <div class="footer-legal flex flex-col sm:flex-row gap-4 sm:gap-8 text-[#888888] text-sm md:text-base font-light">
+                            <span>© 2026 Joel Vieira - All rights reserved</span>
+                            <a href="#" class="hover:text-black transition-colors underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-black">Política de Privacidade</a>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-8 md:gap-10 w-full lg:w-[45%]">
+                        <h2 class="footer-title text-3xl md:text-4xl lg:text-[44px] font-normal leading-[1.15] text-black tracking-tight">
+                            Sua oferta é única, a apresentação dela também precisa ser
+                        </h2>
+                        
+                        <div class="footer-btns flex flex-col sm:flex-row gap-4">
+                            <a href="#" class="bg-black hover:bg-zinc-900 text-white text-sm md:text-base font-light py-3 px-6 rounded-lg flex items-center justify-between gap-6 transition-transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-black/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black">
+                                Aplicar para Sprint
+                                <span class="bg-white text-black w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                </span>
+                            </a>
+                            <a href="#" class="bg-white hover:bg-zinc-50 text-black border border-[#E5E5E5] text-sm md:text-base font-light py-3 px-6 rounded-lg flex items-center justify-between gap-6 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black">
+                                Entrar em contato
+                                <span class="bg-black text-white w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </footer>
+
+            <!-- CARD 03 (Ficará no Topo Esquerdo) -->
+            <article id="card-03" class="s4-card z-[20]">
+                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-xl md:rounded-2xl p-6 md:p-10 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col justify-between overflow-hidden group">
+                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
+                        <h3 class="text-xl md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Direção visual<br>premium</h3>
+                        <p class="text-black/60 font-light text-xs md:text-sm lg:text-base leading-relaxed max-w-[280px]">Cada detalhe comunica o número certo antes do preço aparecer.</p>
+                    </div>
+                    <div class="absolute bottom-2 right-4 md:bottom-4 md:right-8 text-[80px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2" aria-hidden="true">03</div>
+                </div>
+            </article>
+
+            <!-- CARD 01 (Ficará no Topo Direito, começa no centro) -->
+            <article id="card-01" class="s4-card z-[40]">
+                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-xl md:rounded-2xl p-6 md:p-10 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col justify-between overflow-hidden group">
+                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
+                        <h3 class="text-xl md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Diagnóstico<br>da oferta</h3>
+                        <p class="text-black/60 font-light text-xs md:text-sm lg:text-base leading-relaxed max-w-[280px]">Antes de desenhar qualquer coisa, abro sua oferta como um raio-x, vamos identificar pontos de melhoria e ajustes na comunicação.</p>
+                    </div>
+                    <div class="absolute bottom-2 right-4 md:bottom-4 md:right-8 text-[80px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2" aria-hidden="true">01</div>
+                </div>
+            </article>
+
+            <!-- CARD 02 (Ficará na Base Esquerda) -->
+            <article id="card-02" class="s4-card z-[30]">
+                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-xl md:rounded-2xl p-6 md:p-10 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col justify-between overflow-hidden group">
+                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
+                        <h3 class="text-xl md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Arquitetura<br>da página</h3>
+                        <p class="text-black/60 font-light text-xs md:text-sm lg:text-base leading-relaxed max-w-[280px]">Cada bloco tem uma função: gerar confiança, eliminar dúvida, empurrar o scroll.</p>
+                    </div>
+                    <div class="absolute bottom-2 right-4 md:bottom-4 md:right-8 text-[80px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2" aria-hidden="true">02</div>
+                </div>
+            </article>
+
+            <!-- CARD 04 (Ficará na Base Direita) -->
+            <article id="card-04" class="s4-card z-[10]">
+                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-xl md:rounded-2xl p-6 md:p-10 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col justify-between overflow-hidden group">
+                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
+                        <h3 class="text-xl md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Design<br>responsivo</h3>
+                        <p class="text-black/60 font-light text-xs md:text-sm lg:text-base leading-relaxed max-w-[280px]">A maior parte do seu lead decide no polegar, no meio de outra tarefa.</p>
+                    </div>
+                    <div class="absolute bottom-2 right-4 md:bottom-4 md:right-8 text-[80px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2" aria-hidden="true">04</div>
+                </div>
+            </article>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Tratamento de Acessibilidade (Redução de Movimento)
+            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            
+            // 1. Lenis Smooth Scroll Setup
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smooth: !prefersReducedMotion, // Desativa se o usuário preferir
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // 2. GSAP & ScrollTrigger Setup
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                lenis.on('scroll', ScrollTrigger.update);
+                gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+                gsap.ticker.lagSmoothing(0);
+
+                // ================= ANIM: PRELOADER =================
+        lenis.stop();
+        const preloaderTl = gsap.timeline({
+            onComplete: () => {
+                document.getElementById('preloader').style.display = 'none';
+                lenis.start();
+                // REFRESH VITAL: Avisa o GSAP que o preloader sumiu e a altura da tela mudou
+                ScrollTrigger.refresh(); 
+            }
+        });
+
+        if(!prefersReducedMotion) {
+                    const counter = { val: 0 };
+                    preloaderTl.to(counter, {
+                        val: 100,
+                        duration: 1.5, // Acelerado para melhor UX
+                        ease: "power2.inOut",
+                        onUpdate: () => {
+                            document.getElementById("preloader-counter").innerText = Math.round(counter.val) + "%";
+                        }
+                    })
+                    .to("#preloader-counter", { opacity: 0, y: -10, duration: 0.3, ease: "power1.in" })
+                    .to("#preloader-logo", { scale: 30, opacity: 0, duration: 1.0, ease: "power4.inOut" }, "-=0.1")
+                    .to("#preloader", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, "-=0.6")
+                    .from("#hero header, #hero h1, #hero p, #hero .glass-card, #hero .border-primaryYellow", {
+                        y: 30, opacity: 0, duration: 1.2, stagger: 0.1, ease: "power3.out"
+                    }, "-=0.4");
+                } else {
+                    // Fallback para Acessibilidade
+                    preloaderTl.to("#preloader", { opacity: 0, duration: 0.5 });
+                }
+
+                // ================= ANIM: SESSÃO 1 -> 2 (TRANSIÇÃO) =================
+                const textStrS2 = "Acreditamos em uma experiência visual estratégica, clara e pensada para gerar confiança antes da decisão.";
+                const textContainerS2 = document.getElementById("animated-text");
+                
+                textContainerS2.innerHTML = textStrS2.split(" ").map(word => {
+                    return `<span class="word mr-2 md:mr-3">${word}</span>`;
+                }).join("");
+
+                const tlS2 = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#pin-master", 
+                        start: "top top",
+                        end: "+=200%",
+                        pin: true,     
+                        scrub: 1,      
+                    }
+                });
+
+                tlS2.to(".curtain", { scaleY: 1, stagger: 0.05, duration: 1, ease: "power2.inOut" })
+                    .fromTo(".word", { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.05, duration: 1, ease: "power2.out" }, "-=0.4")
+                    .to({}, { duration: 0.5 });
+
+                // ================= ANIM: SESSÃO 3 =================
+                const titleStrS3 = "Projetos Recentes"; 
+                const titleContainerS3 = document.getElementById("projects-title");
+                
+                titleContainerS3.innerHTML = titleStrS3.split("").map(char => {
+                    return char === " " ? `<span class="char">&nbsp;</span>` : `<span class="char">${char}</span>`;
+                }).join("");
+
+                gsap.fromTo("#projects-title .char", 
+                    { opacity: 0, filter: "blur(16px)", y: 40 },
+                    {
+                        opacity: 1, filter: "blur(0px)", y: 0, stagger: 0.1, ease: "none",
+                        scrollTrigger: {
+                            trigger: "#section3",
+                            start: "top 85%",
+                            end: "top 30%",
+                            scrub: 1 // Agora anima 100% amarrado à roda do mouse
+                        }
+                    }
+                );
+
+                gsap.to(".s3-line", {
+                    y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#section3",
+                        start: "top 65%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+
+                // Abertura dos cards amarrada ao scroll, abrindo perfeitamente do centro
+                gsap.utils.toArray(".portfolio-card").forEach(card => {
+                    gsap.fromTo(card, 
+                        { clipPath: "inset(0% 50% 0% 50% round 40px)" }, // Força início no centro absoluto
+                        {
+                            clipPath: "inset(0% 0% 0% 0% round 0px)",
+                            ease: "none", // Movimento linear seguindo o scroll
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top 85%",
+                                end: "top 20%",
+                                scrub: 1 // Transforma a animação em um comportamento de scroll puro
+                            }
+                        }
+                    );
+                });
+
+                // ================= ANIM: SESSÃO 4 (COREOGRAFIA DE CARDS + FOOTER) =================
+                // Lógica OTIMIZADA com sistema de estados para não disparar tweens a cada pixel de scroll
+                const s4States = { c1: false, c2: false, c3: false, out: false };
+
+                const onUpdateS4 = function(self) {
+                    let p = self.progress; 
+                    const inOutSpeed = 0.4;
+                    
+                    // Card 01
+                    if (p > 0.05 && !s4States.c1) {
+                        gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true });
+                        s4States.c1 = true;
+                    } else if (p <= 0.05 && s4States.c1) {
+                        gsap.to("#card-01 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true });
+                        s4States.c1 = false;
+                    }
+                    
+                    // Card 02
+                    if (p > 0.20 && !s4States.c2) {
+                        gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true });
+                        s4States.c2 = true;
+                    } else if (p <= 0.20 && s4States.c2) {
+                        gsap.to("#card-02 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true });
+                        s4States.c2 = false;
+                    }
+                    
+                    // Cards 03 e 04
+                    if (p > 0.38 && !s4States.c3) {
+                        gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true });
+                        s4States.c3 = true;
+                    } else if (p <= 0.38 && s4States.c3) {
+                        gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true });
+                        s4States.c3 = false;
+                    }
+                    
+                    // Saída Geral
+                    if (p > 0.60 && !s4States.out) {
+                        gsap.to(".s4-text", { opacity: 0, y: -10, duration: 0.3, overwrite: true });
+                        s4States.out = true;
+                    } else if (p <= 0.60 && s4States.out) {
+                        // Restaura os textos se o usuário voltar o scroll para cima
+                        if (s4States.c1) gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
+                        if (s4States.c2) gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
+                        if (s4States.c3) gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
+                        s4States.out = false;
+                    }
+                };
+
+                const s4Tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#section4",
+                        start: "top top",
+                        end: "+=600%", 
+                        scrub: 1.0, // Reduzido de 1.2 para sincronizar melhor com o Lenis
+                        pin: true,
+                        onUpdate: onUpdateS4
+                    }
+                });
+
+                // PERFORMANCE: Usando xPercent/yPercent para manipular as cartas puramente na GPU
+                gsap.set(".s4-card", { xPercent: -50, yPercent: -50 });
+                gsap.set("#white-rect", { xPercent: -50, yPercent: -50 });
+                
+                // ESCONDE as cartas 2, 3 e 4 no início para que não vazem pelas bordas
+                gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 });
+
+                // Distância percentual do gap (ajustado para precisão no centro)
+                const gap = 3; 
+
+                s4Tl.to({}, { duration: 1.0 }) // Respiro para ler o Card 1
+                    
+                    // FASE 1: Divisão Diagonal
+                    .to("#card-02", { autoAlpha: 1, duration: 0.1 }, "split") // Acende Card 2 assim que o movimento inicia
+                    .to("#card-01", { xPercent: gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "split")
+                    .to("#card-02", { xPercent: -100 - gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "split")
+                    
+                    .to({}, { duration: 0.5 }) 
+
+                    // FASE 2: Revelação da Grade (Cartas 3 e 4 vêm das posições opostas ocultas)
+                    .fromTo("#card-03", { autoAlpha: 0, xPercent: -100 - gap, yPercent: 100 + gap }, { autoAlpha: 1, xPercent: -100 - gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "grid")
+                    .fromTo("#card-04", { autoAlpha: 0, xPercent: gap, yPercent: -100 - gap }, { autoAlpha: 1, xPercent: gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "grid")
+
+                    .to({}, { duration: 2.0 }) // Pausa leitura da Grade
+
+                    // FASE 3: Saída - Colapso de volta ao centro
+                    .to(".s4-card", { xPercent: -50, yPercent: -50, duration: 1.2, ease: "power2.inOut" })
+
+                    // FASE 4: Crossfade para o Retângulo Branco
+                    .to(".s4-card", { opacity: 0, duration: 0.1 })
+                    .to("#white-rect", { opacity: 1, duration: 0.1 }, "<")
+                    
+                    // FASE 5: Expansão Infinita do Branco + Footer Overlap
+                    .to("#white-rect", { 
+                        width: "100vw", 
+                        maxWidth: "100vw", 
+                        height: "100vh", 
+                        borderRadius: "0px", 
+                        duration: 2.0, 
+                        ease: "power3.inOut" 
+                    }, "expand")
+                    
+                    // FASE 6: Revelação Fluida do Footer (Inicia na marca de 70% da expansão do branco)
+                    .to("#footer-wrapper", { autoAlpha: 1, duration: 0.1, pointerEvents: "auto" }, "expand+=1.4")
+                    .fromTo(".footer-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.4")
+                    .fromTo(".footer-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
+                    .fromTo(".footer-btns", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
+                    .fromTo(".footer-legal", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
+                    
+                    .to({}, { duration: 0.5 }); 
+            }
+        });
+    </script>
+</body>
+</html>
