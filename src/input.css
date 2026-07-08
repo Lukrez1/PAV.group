@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Sora';
+    src: url('../fonts/Sora-VariableFont_wght.ttf') format('truetype-variations'),
+         url('../fonts/Sora-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-stretch: 75% 125%;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* BASE & ACESSIBILIDADE */
+html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+    font-family: 'Sora', sans-serif;
+    background-color: #000;
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible { outline: 2px solid #E3B737; outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+.bg-hero { background: url('../images/HOME-HERO_2x.webp') center/cover no-repeat #111; }
+.glass-card { background: rgba(10, 10, 10, 0.45); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+
+.curtain {
+    width: calc(100% / 6); 
+    height: 100%;
+    background-color: #000;
+    transform-origin: top;
+    transform: scaleY(0);
+    will-change: transform;
+}
+
+.char, .word { display: inline-block; will-change: filter, opacity, transform; }
+
+.portfolio-card {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    clip-path: inset(0 50% 0 50% round 40px);
+    will-change: clip-path;
+}
+
+/* --- SESSÃO 4: RESPONSIVIDADE EXTREMA --- */
+.s4-card {
+    position: absolute;
+    width: 88vw;
+    height: 20vh;
+    min-height: 140px; 
+    max-height: 180px;
+    top: 50%;
+    left: 50%;
+    will-change: transform, opacity;
+}
+
+#white-rect {
+    position: absolute;
+    width: 88vw;
+    height: 20vh;
+    min-height: 140px;
+    max-height: 180px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    top: 50%;
+    left: 50%;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, width, height, border-radius, opacity;
+}
+
+/* Desktop Restaura o Visual Grid Quadrado */
+@media (min-width: 768px) {
+    .s4-card, #white-rect {
+        width: 44vw;
+        max-width: 480px;
+        height: auto;
+        aspect-ratio: 4/3;
+        min-height: auto;
+        max-height: none;
+    }
+    #white-rect { border-radius: 16px; }
+}
+
+.s4-inner { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+.s4-num { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+
+@media (hover: hover) {
+    .s4-card:hover .s4-inner { transform: scale(1.02); }
+    .s4-card:hover .s4-num { transform: scale(1.1) translateY(-10px); }
+}
+
+@media (max-width: 767px) {
+    .s4-text { opacity: 1 !important; transform: translateY(0) !important; }
+}

@@ -7,130 +7,16 @@
     <meta name="description" content="Nós lapidamos ofertas para que elas vendam com clareza.">
     
     <!-- Pré-carregamento de Assets Críticos -->
-    <link rel="preload" href="HOME-HERO_2x.webp" as="image">
+    <link rel="preload" href="assets/images/HOME-HERO_2x.webp" as="image">
     
-    <!-- Google Fonts: Sora -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS Estático Compilado (Tailwind + Estilos Customizados + Font Face Local) -->
+    <link rel="stylesheet" href="assets/css/styles.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- GSAP & Lenis (Deferidos para performance) -->
+    <!-- GSAP, Lenis & Script Principal (Deferidos para máxima performance) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sora: ['Sora', 'sans-serif'] },
-                    colors: { primaryYellow: '#E3B737' }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        /* BASE & ACESSIBILIDADE */
-        html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background-color: #000;
-            color: #fff;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        *:focus-visible { outline: 2px solid #E3B737; outline-offset: 4px; }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-        }
-        
-        .bg-hero { background: url('HOME-HERO_2x.webp') center/cover no-repeat #111; }
-        .glass-card { background: rgba(10, 10, 10, 0.45); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
-
-        .curtain {
-            width: calc(100% / 6); 
-            height: 100%;
-            background-color: #000;
-            transform-origin: top;
-            transform: scaleY(0);
-            will-change: transform;
-        }
-
-        .char, .word { display: inline-block; will-change: filter, opacity, transform; }
-
-        .portfolio-card {
-            aspect-ratio: 16 / 9;
-            width: 100%;
-            max-width: 1920px;
-            margin: 0 auto;
-            clip-path: inset(0 50% 0 50% round 40px);
-            will-change: clip-path;
-        }
-
-        /* --- SESSÃO 4: RESPONSIVIDADE EXTREMA --- */
-        /* Configuração Mobile: Cartas menores em altura para caberem 4 na tela */
-        .s4-card {
-            position: absolute;
-            width: 88vw;
-            height: 20vh; /* Altura ideal para formar a coluna */
-            min-height: 140px; 
-            max-height: 180px;
-            top: 50%;
-            left: 50%;
-            will-change: transform, opacity;
-        }
-        
-        #white-rect {
-            position: absolute;
-            width: 88vw;
-            height: 20vh;
-            min-height: 140px;
-            max-height: 180px;
-            border-radius: 12px;
-            background-color: #ffffff;
-            top: 50%;
-            left: 50%;
-            z-index: 50;
-            opacity: 0;
-            pointer-events: none;
-            will-change: transform, width, height, border-radius, opacity;
-        }
-
-        /* Desktop Restaura o Visual Grid Quadrado */
-        @media (min-width: 768px) {
-            .s4-card, #white-rect {
-                width: 44vw;
-                max-width: 480px;
-                height: auto;
-                aspect-ratio: 4/3;
-                min-height: auto;
-                max-height: none;
-            }
-            #white-rect { border-radius: 16px; }
-        }
-
-        .s4-inner { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-        .s4-num { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
-        
-        @media (hover: hover) {
-            .s4-card:hover .s4-inner { transform: scale(1.02); }
-            .s4-card:hover .s4-num { transform: scale(1.1) translateY(-10px); }
-        }
-
-        @media (max-width: 767px) {
-            .s4-text { opacity: 1 !important; transform: translateY(0) !important; }
-        }
-    </style>
+    <script defer src="assets/js/main.js"></script>
 </head>
 <body>
 
@@ -138,7 +24,7 @@
     <div id="mobile-menu" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl translate-x-full transition-transform duration-500 flex flex-col px-6 pt-8 pb-12 overflow-y-auto" aria-hidden="true">
         
         <div class="flex justify-between items-center w-full mb-12">
-            <img src="LOGO.svg" alt="PAV Group Logo" class="h-6">
+            <img src="assets/images/LOGO.svg" alt="PAV Group Logo" width="104" height="24" class="h-6">
             <button id="menu-close" class="text-white p-2 focus:outline-none" aria-label="Fechar menu">
                 <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -153,7 +39,7 @@
 
         <div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center gap-4 w-full shadow-2xl mt-auto">
             <div class="w-24 h-24 rounded-full overflow-hidden border border-white/20">
-                <img src="FOTO_2x.webp" alt="Joel Vieira" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90">
+                <img src="assets/images/FOTO_2x.webp" alt="Joel Vieira" width="96" height="96" loading="lazy" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90">
             </div>
             <div>
                 <h3 class="text-white font-semibold text-lg">Fale com Joel</h3>
@@ -168,9 +54,28 @@
 
     <!-- PRELOADER -->
     <div id="preloader" class="fixed inset-0 z-[90] bg-black flex flex-col items-center justify-center" aria-hidden="true">
-        <img id="preloader-logo" src="Vector.svg" alt="" class="h-12 md:h-16 mb-4 object-contain will-change-transform">
+        <img id="preloader-logo" src="assets/images/Vector.svg" alt="" width="68" height="64" class="h-12 md:h-16 mb-4 object-contain will-change-transform">
         <div id="preloader-counter" class="text-white/80 font-medium text-xl md:text-2xl tracking-tight">0%</div>
     </div>
+    
+    <!-- Script de Simulação Inicial Vanilla (Assíncrono e Imediato) -->
+    <script>
+        (function() {
+            var counterEl = document.getElementById('preloader-counter');
+            var count = 0;
+            var interval = setInterval(function() {
+                if (count < 85) {
+                    count += Math.floor(Math.random() * 5) + 1;
+                    if (count > 85) count = 85;
+                    if (counterEl) counterEl.textContent = count + '%';
+                } else {
+                    clearInterval(interval);
+                }
+            }, 30);
+            window.__preloaderInterval = interval;
+            window.__preloaderCount = count;
+        })();
+    </script>
 
     <main id="smooth-wrapper">
         <div id="pin-master" class="relative w-full h-screen">
@@ -180,7 +85,7 @@
                 <header class="w-full px-6 md:px-16 pt-8 pb-4 relative z-20">
                     <nav class="flex justify-center md:justify-between items-center w-full relative" aria-label="Navegação Principal">
                         <a href="#" class="block hover:opacity-80 transition-opacity" aria-label="Página Inicial">
-                            <img src="LOGO.svg" alt="PAV Group Logo" class="h-6 md:h-8">
+                            <img src="assets/images/LOGO.svg" alt="PAV Group Logo" width="139" height="32" class="h-6 md:h-8">
                         </a>
                         <button id="menu-toggle" class="md:hidden absolute right-0 text-white p-2 focus:outline-none" aria-label="Abrir Menu">
                             <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -232,10 +137,10 @@
                         <div class="hidden md:flex w-full lg:w-auto justify-start lg:justify-end">
                             <div class="glass-card rounded-2xl p-2.5 flex items-center gap-5 max-w-[420px] shadow-2xl">
                                 <div class="w-[120px] h-[160px] flex-shrink-0 overflow-hidden bg-zinc-800 rounded-xl relative">
-                                    <img src="FOTO_2x.webp" alt="Foto Joel Vieira" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90 absolute inset-0">
+                                    <img src="assets/images/FOTO_2x.webp" alt="Foto Joel Vieira" width="120" height="160" loading="lazy" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-90 absolute inset-0">
                                 </div>
                                 <div class="flex flex-col justify-center pr-4">
-                                    <img src="Vector.svg" alt="" aria-hidden="true" class="h-4 w-auto mb-3 opacity-80 object-contain self-start">
+                                    <img src="assets/images/Vector.svg" alt="" aria-hidden="true" width="17" height="16" class="h-4 w-auto mb-3 opacity-80 object-contain self-start">
                                     <h3 class="text-white font-semibold text-base">Fale com Joel</h3>
                                     <p class="text-white/60 text-xs font-light mb-4">Founder da PAV.group</p>
                                     <a href="#contato" class="bg-white hover:bg-zinc-200 transition-transform hover:scale-105 active:scale-95 text-black text-[11px] font-semibold py-2 px-4 rounded-full flex items-center justify-between gap-3 w-fit focus-visible:ring-2 focus-visible:ring-primaryYellow">
@@ -295,7 +200,7 @@
                 <div class="w-full h-full md:h-auto max-w-[1440px] px-6 md:px-16 py-12 md:py-0 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-12 lg:gap-8">
                     
                     <div class="order-2 lg:order-1 flex flex-col gap-8 lg:gap-14 w-full lg:w-1/2 mt-auto lg:mt-0 text-center lg:text-left">
-                        <img src="LOGO.svg" alt="PAV Group" class="footer-logo w-[140px] md:w-full max-w-[280px] md:max-w-[380px] lg:max-w-[440px] mx-auto lg:mx-0 object-contain brightness-0 mix-blend-multiply">
+                        <img src="assets/images/LOGO.svg" alt="PAV Group" width="440" height="101" class="footer-logo w-[140px] md:w-full max-w-[280px] md:max-w-[380px] lg:max-w-[440px] mx-auto lg:mx-0 object-contain brightness-0 mix-blend-multiply">
                         <div class="footer-legal flex flex-col sm:flex-row justify-center lg:justify-start gap-4 sm:gap-8 text-[#888888] text-[11px] sm:text-sm md:text-base font-light">
                             <span>© 2026 Joel Vieira - All rights reserved</span>
                             <a href="#" class="hover:text-black transition-colors underline-offset-4 hover:underline">Política de Privacidade</a>
@@ -321,17 +226,6 @@
                 </div>
             </footer>
 
-            <!-- CARD 03 -->
-            <article id="card-03" class="s4-card z-[20]">
-                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-2xl md:rounded-3xl p-5 md:p-10 flex flex-col justify-between overflow-hidden">
-                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
-                        <h3 class="text-lg md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Direção visual<br>premium</h3>
-                        <p class="text-black/60 font-light text-[11px] md:text-sm lg:text-base leading-relaxed max-w-[280px]">Cada detalhe comunica o número certo antes do preço aparecer.</p>
-                    </div>
-                    <div class="s4-num absolute bottom-2 right-4 md:bottom-8 md:right-10 text-[60px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter" aria-hidden="true">03</div>
-                </div>
-            </article>
-
             <!-- CARD 01 -->
             <article id="card-01" class="s4-card z-[40]">
                 <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-2xl md:rounded-3xl p-5 md:p-10 flex flex-col justify-between overflow-hidden">
@@ -354,6 +248,17 @@
                 </div>
             </article>
 
+            <!-- CARD 03 -->
+            <article id="card-03" class="s4-card z-[20]">
+                <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-2xl md:rounded-3xl p-5 md:p-10 flex flex-col justify-between overflow-hidden">
+                    <div class="s4-text relative z-10 opacity-0 translate-y-4 will-change-transform">
+                        <h3 class="text-lg md:text-3xl lg:text-[32px] font-medium text-black leading-tight mb-2 md:mb-4 tracking-tight">Direção visual<br>premium</h3>
+                        <p class="text-black/60 font-light text-[11px] md:text-sm lg:text-base leading-relaxed max-w-[280px]">Cada detalhe comunica o número certo antes do preço aparecer.</p>
+                    </div>
+                    <div class="s4-num absolute bottom-2 right-4 md:bottom-8 md:right-10 text-[60px] md:text-[120px] lg:text-[140px] leading-none font-light text-black/10 tracking-tighter" aria-hidden="true">03</div>
+                </div>
+            </article>
+
             <!-- CARD 04 -->
             <article id="card-04" class="s4-card z-[10]">
                 <div class="s4-inner w-full h-full bg-[#E2E2E2] rounded-2xl md:rounded-3xl p-5 md:p-10 flex flex-col justify-between overflow-hidden">
@@ -367,211 +272,5 @@
 
         </section>
     </main>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            
-            const menuToggle = document.getElementById('menu-toggle');
-            const menuClose = document.getElementById('menu-close');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            if (menuToggle && menuClose && mobileMenu) {
-                menuToggle.addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
-                menuClose.addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
-            }
-
-            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smooth: !prefersReducedMotion,
-            });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-            requestAnimationFrame(raf);
-
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
-                lenis.on('scroll', ScrollTrigger.update);
-                gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-                gsap.ticker.lagSmoothing(0);
-
-                lenis.stop();
-                const preloaderTl = gsap.timeline({
-                    onComplete: () => {
-                        document.getElementById('preloader').style.display = 'none';
-                        lenis.start();
-                        ScrollTrigger.refresh(); 
-                    }
-                });
-
-                if(!prefersReducedMotion) {
-                    const counter = { val: 0 };
-                    preloaderTl.to(counter, {
-                        val: 100, duration: 1.5, ease: "power2.inOut",
-                        onUpdate: () => document.getElementById("preloader-counter").innerText = Math.round(counter.val) + "%"
-                    })
-                    .to("#preloader-counter", { opacity: 0, y: -10, duration: 0.3, ease: "power1.in" })
-                    .to("#preloader-logo", { scale: 30, opacity: 0, duration: 1.0, ease: "power4.inOut" }, "-=0.1")
-                    .to("#preloader", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, "-=0.6")
-                    .from("#hero header, #hero h1, #hero p, #hero .glass-card, #hero .border-primaryYellow", {
-                        y: 30, opacity: 0, duration: 1.2, stagger: 0.1, ease: "power3.out"
-                    }, "-=0.4");
-                } else {
-                    preloaderTl.to("#preloader", { opacity: 0, duration: 0.5 });
-                }
-
-                const textStrS2 = "Acreditamos em uma experiência visual estratégica, clara e pensada para gerar confiança antes da decisão.";
-                const textContainerS2 = document.getElementById("animated-text");
-                textContainerS2.innerHTML = textStrS2.split(" ").map(word => `<span class="word mr-1.5 md:mr-3">${word}</span>`).join("");
-
-                gsap.timeline({
-                    scrollTrigger: { trigger: "#pin-master", start: "top top", end: "+=200%", pin: true, scrub: 1 }
-                })
-                .to(".curtain", { scaleY: 1, stagger: 0.05, duration: 1, ease: "power2.inOut" })
-                .fromTo(".word", { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.05, duration: 1, ease: "power2.out" }, "-=0.4")
-                .to({}, { duration: 0.5 });
-
-                const titleStrS3 = "Projetos Recentes"; 
-                const titleContainerS3 = document.getElementById("projects-title");
-                titleContainerS3.innerHTML = titleStrS3.split("").map(char => char === " " ? `<span class="char">&nbsp;</span>` : `<span class="char">${char}</span>`).join("");
-
-                gsap.fromTo("#projects-title .char", 
-                    { opacity: 0, filter: "blur(16px)" },
-                    { opacity: 1, filter: "blur(0px)", stagger: 0.1, ease: "none",
-                      scrollTrigger: { trigger: "#section3", start: "top 80%", end: "top 30%", scrub: 1 }
-                    }
-                );
-
-                gsap.to(".s3-line", {
-                    y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power4.out",
-                    scrollTrigger: { trigger: "#section3", start: "top 65%", toggleActions: "play none none reverse" }
-                });
-
-                gsap.utils.toArray(".portfolio-card").forEach(card => {
-                    gsap.fromTo(card, 
-                        { clipPath: "inset(0% 50% 0% 50% round 40px)" },
-                        { clipPath: "inset(0% 0% 0% 0% round 0px)", duration: 1.2, ease: "power3.inOut",
-                          scrollTrigger: { trigger: card, start: "top 85%", toggleActions: "play none none reverse", onComplete: () => ScrollTrigger.refresh() }
-                        }
-                    );
-                });
-
-                let mm = gsap.matchMedia();
-
-                // --- DESKTOP (Grid 2x2 Clássico) ---
-                mm.add("(min-width: 768px)", () => {
-                    const s4States = { c1: false, c2: false, c3: false, out: false };
-                    
-                    const onUpdateS4 = function(self) {
-                        let p = self.progress; 
-                        const inOutSpeed = 0.4;
-                        if (p > 0.05 && !s4States.c1) { gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c1 = true; } 
-                        else if (p <= 0.05 && s4States.c1) { gsap.to("#card-01 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c1 = false; }
-                        
-                        if (p > 0.20 && !s4States.c2) { gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c2 = true; } 
-                        else if (p <= 0.20 && s4States.c2) { gsap.to("#card-02 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c2 = false; }
-                        
-                        if (p > 0.38 && !s4States.c3) { gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c3 = true; } 
-                        else if (p <= 0.38 && s4States.c3) { gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c3 = false; }
-                        
-                        if (p > 0.60 && !s4States.out) { gsap.to(".s4-text", { opacity: 0, y: -10, duration: 0.3, overwrite: true }); s4States.out = true; } 
-                        else if (p <= 0.60 && s4States.out) {
-                            if (s4States.c1) gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                            if (s4States.c2) gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                            if (s4States.c3) gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                            s4States.out = false;
-                        }
-                    };
-
-                    const s4Tl = gsap.timeline({
-                        scrollTrigger: { trigger: "#section4", start: "top top", end: "+=500%", scrub: 1, pin: true, onUpdate: onUpdateS4 }
-                    });
-
-                    gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
-                    gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 });
-                    const gap = 3; 
-
-                    s4Tl.to({}, { duration: 1.0 }) 
-                        .to("#card-02", { autoAlpha: 1, duration: 0.1 }, "split") 
-                        .to("#card-01", { xPercent: gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "split")
-                        .to("#card-02", { xPercent: -100 - gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "split")
-                        .to({}, { duration: 0.5 }) 
-                        .fromTo("#card-03", { autoAlpha: 0, xPercent: -100 - gap, yPercent: 100 + gap }, { autoAlpha: 1, xPercent: -100 - gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "grid")
-                        .fromTo("#card-04", { autoAlpha: 0, xPercent: gap, yPercent: -100 - gap }, { autoAlpha: 1, xPercent: gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "grid")
-                        .to({}, { duration: 2.0 }) 
-                        .to(".s4-card", { xPercent: -50, yPercent: -50, duration: 1.2, ease: "power2.inOut" })
-                        .to(".s4-card", { opacity: 0, duration: 0.1 })
-                        .to("#white-rect", { opacity: 1, duration: 0.1 }, "<")
-                        .to("#white-rect", { width: "100vw", maxWidth: "100vw", height: "100vh", borderRadius: "0px", duration: 2.0, ease: "power3.inOut" }, "expand")
-                        .to("#footer-wrapper", { autoAlpha: 1, duration: 0.1, pointerEvents: "auto" }, "expand+=1.4")
-                        .fromTo(".footer-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.4")
-                        .fromTo(".footer-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
-                        .fromTo(".footer-btns", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
-                        .fromTo(".footer-legal", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "expand+=1.6")
-                        .to({}, { duration: 0.5 }); 
-                });
-
-                // --- MOBILE (Cascata Vertical Centralizada) ---
-                mm.add("(max-width: 767px)", () => {
-                    // Configuração Inicial (Todas as cartas empilhadas no exato centro da tela)
-                    gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
-                    gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 }); // Escondidas até saírem por baixo
-                    
-                    // Z-index (garante que 1 fique por cima da 2, a 2 por cima da 3...)
-                    gsap.set("#card-01", { zIndex: 40 });
-                    gsap.set("#card-02", { zIndex: 30 });
-                    gsap.set("#card-03", { zIndex: 20 });
-                    gsap.set("#card-04", { zIndex: 10 });
-
-                    const s4TlMobile = gsap.timeline({
-                        scrollTrigger: { trigger: "#section4", start: "top top", end: "+=600%", scrub: 1, pin: true }
-                    });
-
-                    s4TlMobile.to({}, { duration: 0.5 }) 
-
-                    // PASSO 1: (Aparece o 2) - C1 sobe e C2 desliza por baixo com fade-in suave.
-                    .to("#card-01", { yPercent: -102, duration: 1.2, ease: "power2.inOut" }, "s1")
-                    .to("#card-02", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s1+=0.2") 
-                    .to("#card-02", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s1")
-
-                    .to({}, { duration: 0.3 }) 
-
-                    // PASSO 2: (Aparece o 3) - C1 e C2 sobem, C3 desliza com fade-in suave.
-                    .to("#card-01", { yPercent: -154, duration: 1.2, ease: "power2.inOut" }, "s2")
-                    .to("#card-02", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "s2")
-                    .to("#card-03", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s2+=0.2") 
-                    .to("#card-03", { yPercent: 54, duration: 1.2, ease: "power2.inOut" }, "s2")
-
-                    .to({}, { duration: 0.3 }) 
-
-                    // PASSO 3: (Aparece o 4) - C1, C2 e C3 sobem, C4 desliza com fade-in suave.
-                    .to("#card-01", { yPercent: -206, duration: 1.2, ease: "power2.inOut" }, "s3")
-                    .to("#card-02", { yPercent: -102, duration: 1.2, ease: "power2.inOut" }, "s3")
-                    .to("#card-03", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s3")
-                    .to("#card-04", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s3+=0.2") 
-                    .to("#card-04", { yPercent: 106, duration: 1.2, ease: "power2.inOut" }, "s3")
-
-                    .to({}, { duration: 1.2 }) 
-
-                    // PASSO 4: (Colapso) - Todas voltam pro centro. As de trás apagam suavemente.
-                    .to(".s4-card", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "collapse")
-                    .to("#card-02, #card-03, #card-04", { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, "collapse+=0.4")
-
-                    // PASSO 5: (Expansão e Footer) - O Retângulo inicia do tamanho do Card 1, depois expande.
-                    .to("#white-rect", { autoAlpha: 1, duration: 0.1 }, "expandStart")
-                    .to("#card-01", { autoAlpha: 0, duration: 0.4 }, "expandStart")
-                    .to("#white-rect", { width: "100vw", maxWidth: "100vw", height: "100vh", maxHeight: "100vh", borderRadius: "0px", duration: 1.5, ease: "power3.inOut" }, "expandStart+=0.1")
-
-                    .to("#footer-wrapper", { autoAlpha: 1, duration: 0.1, pointerEvents: "auto" }, "expandStart+=1.0")
-                    .fromTo(".footer-title", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expandStart+=1.0")
-                    .fromTo(".footer-btns", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expandStart+=1.1")
-                    .fromTo(".footer-logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expandStart+=1.2")
-                    .fromTo(".footer-legal", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expandStart+=1.2")
-                    .to({}, { duration: 0.5 });
-                });
-            }
-        });
-    </script>
 </body>
 </html>

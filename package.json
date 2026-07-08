@@ -1,0 +1,12 @@
+{
+  "name": "pav-group-landing",
+  "version": "1.0.0",
+  "description": "PAV.GROUP Landing Page optimized for performance and hierarchy",
+  "main": "index.html",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
