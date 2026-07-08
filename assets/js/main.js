@@ -145,31 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- DESKTOP (Grid 2x2 Clássico) ---
         mm.add("(min-width: 768px)", () => {
-            const s4States = { c1: false, c2: false, c3: false, out: false };
-            
-            const onUpdateS4 = function(self) {
-                let p = self.progress; 
-                const inOutSpeed = 0.4;
-                if (p > 0.05 && !s4States.c1) { gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c1 = true; } 
-                else if (p <= 0.05 && s4States.c1) { gsap.to("#card-01 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c1 = false; }
-                
-                if (p > 0.20 && !s4States.c2) { gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c2 = true; } 
-                else if (p <= 0.20 && s4States.c2) { gsap.to("#card-02 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c2 = false; }
-                
-                if (p > 0.38 && !s4States.c3) { gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: inOutSpeed, overwrite: true }); s4States.c3 = true; } 
-                else if (p <= 0.38 && s4States.c3) { gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 0, y: 15, duration: 0.3, overwrite: true }); s4States.c3 = false; }
-                
-                if (p > 0.60 && !s4States.out) { gsap.to(".s4-text", { opacity: 0, y: -10, duration: 0.3, overwrite: true }); s4States.out = true; } 
-                else if (p <= 0.60 && s4States.out) {
-                    if (s4States.c1) gsap.to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                    if (s4States.c2) gsap.to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                    if (s4States.c3) gsap.to("#card-03 .s4-text, #card-04 .s4-text", { opacity: 1, y: 0, duration: 0.3, overwrite: true });
-                    s4States.out = false;
-                }
-            };
-
             const s4Tl = gsap.timeline({
-                scrollTrigger: { trigger: "#section4", start: "top top", end: "+=500%", scrub: 1, pin: true, onUpdate: onUpdateS4 }
+                scrollTrigger: { trigger: "#section4", start: "top top", end: "+=500%", scrub: 1, pin: true }
             });
 
             gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
@@ -177,13 +154,26 @@ document.addEventListener("DOMContentLoaded", () => {
             const gap = 3; 
 
             s4Tl.to({}, { duration: 1.0 }) 
+                // O texto do Card-01 entra suavemente no scroll inicial
+                .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
+
                 .to("#card-02", { autoAlpha: 1, duration: 0.1 }, "split") 
                 .to("#card-01", { xPercent: gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "split")
                 .to("#card-02", { xPercent: -100 - gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "split")
+                // O texto do Card-02 surge suavemente conforme os cards se separam
+                .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "split+=0.4")
+
                 .to({}, { duration: 0.5 }) 
                 .fromTo("#card-03", { autoAlpha: 0, xPercent: -100 - gap, yPercent: 100 + gap }, { autoAlpha: 1, xPercent: -100 - gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "grid")
                 .fromTo("#card-04", { autoAlpha: 0, xPercent: gap, yPercent: -100 - gap }, { autoAlpha: 1, xPercent: gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, "grid")
+                // Os textos dos Cards-03 e 04 entram conforme o grid se forma
+                .to(["#card-03 .s4-text", "#card-04 .s4-text"], { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "grid+=0.4")
+
                 .to({}, { duration: 2.0 }) 
+                
+                // Os textos de todos os cards desaparecem suavemente antes de colapsar
+                .to(".s4-text", { opacity: 0, y: -10, duration: 0.8, ease: "power2.in" })
+
                 .to(".s4-card", { xPercent: -50, yPercent: -50, duration: 1.2, ease: "power2.inOut" })
                 .to(".s4-card", { opacity: 0, duration: 0.1 })
                 .to("#white-rect", { opacity: 1, duration: 0.1 }, "<")
@@ -211,10 +201,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             s4TlMobile.to({}, { duration: 0.5 }) 
+            // Texto do Card-01 entra no início
+            .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
 
             .to("#card-01", { yPercent: -102, duration: 1.2, ease: "power2.inOut" }, "s1")
             .to("#card-02", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s1+=0.2") 
             .to("#card-02", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s1")
+            // Texto do Card-02 entra conforme ele surge
+            .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s1+=0.4")
 
             .to({}, { duration: 0.3 }) 
 
@@ -222,6 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .to("#card-02", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "s2")
             .to("#card-03", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s2+=0.2") 
             .to("#card-03", { yPercent: 54, duration: 1.2, ease: "power2.inOut" }, "s2")
+            // Texto do Card-03 entra conforme ele surge
+            .to("#card-03 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s2+=0.4")
 
             .to({}, { duration: 0.3 }) 
 
@@ -230,8 +226,13 @@ document.addEventListener("DOMContentLoaded", () => {
             .to("#card-03", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s3")
             .to("#card-04", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s3+=0.2") 
             .to("#card-04", { yPercent: 106, duration: 1.2, ease: "power2.inOut" }, "s3")
+            // Texto do Card-04 entra conforme ele surge
+            .to("#card-04 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s3+=0.4")
 
             .to({}, { duration: 1.2 }) 
+
+            // Todos os textos de card desaparecem antes de colapsar
+            .to(".s4-text", { opacity: 0, y: -10, duration: 0.8, ease: "power2.in" })
 
             .to(".s4-card", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "collapse")
             .to("#card-02, #card-03, #card-04", { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, "collapse+=0.4")
