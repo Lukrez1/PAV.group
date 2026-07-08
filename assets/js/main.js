@@ -220,44 +220,44 @@ document.addEventListener("DOMContentLoaded", () => {
             // Texto do Card-01 entra suave no início
             .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
 
-            // S1: Começa a subir. Texto do Card-01 apaga (número continua visível!)
+            // S1: Card-01 sobe e Card-02 entra. Texto do Card-01 apaga (número continua!)
             .to("#card-01 .s4-text", { opacity: 0, duration: 0.4 }, "s1")
-            .to("#card-01", { yPercent: -102, duration: 1.2, ease: "power2.inOut" }, "s1")
+            .to("#card-01", { yPercent: -110, duration: 1.2, ease: "power2.inOut" }, "s1")
             .to("#card-02", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s1+=0.2") 
-            .to("#card-02", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s1")
+            .to("#card-02", { yPercent: 10, duration: 1.2, ease: "power2.inOut" }, "s1")
             // Quando S1 completa, texto do Card-02 surge
             .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s1+=1.2")
 
             .to({}, { duration: 0.3 }) 
 
-            // S2: Começa a subir. Texto do Card-02 apaga (número continua visível!)
+            // S2: Card-01 e 02 sobem mais para dar espaço para Card-03
             .to("#card-02 .s4-text", { opacity: 0, duration: 0.4 }, "s2")
-            .to("#card-01", { yPercent: -154, duration: 1.2, ease: "power2.inOut" }, "s2")
-            .to("#card-02", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "s2")
+            .to("#card-01", { yPercent: -220, duration: 1.2, ease: "power2.inOut" }, "s2")
+            .to("#card-02", { yPercent: -100, duration: 1.2, ease: "power2.inOut" }, "s2")
             .to("#card-03", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s2+=0.2") 
-            .to("#card-03", { yPercent: 54, duration: 1.2, ease: "power2.inOut" }, "s2")
+            .to("#card-03", { yPercent: 20, duration: 1.2, ease: "power2.inOut" }, "s2")
             // Quando S2 completa, texto do Card-03 surge
             .to("#card-03 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s2+=1.2")
 
             .to({}, { duration: 0.3 }) 
 
-            // S3: Começa a subir. Texto do Card-03 apaga (número continua visível!)
+            // S3: Card-01, 02 e 03 sobem mais para dar espaço para Card-04
             .to("#card-03 .s4-text", { opacity: 0, duration: 0.4 }, "s3")
-            .to("#card-01", { yPercent: -206, duration: 1.2, ease: "power2.inOut" }, "s3")
-            .to("#card-02", { yPercent: -102, duration: 1.2, ease: "power2.inOut" }, "s3")
-            .to("#card-03", { yPercent: 2, duration: 1.2, ease: "power2.inOut" }, "s3")
+            .to("#card-01", { yPercent: -330, duration: 1.2, ease: "power2.inOut" }, "s3")
+            .to("#card-02", { yPercent: -210, duration: 1.2, ease: "power2.inOut" }, "s3")
+            .to("#card-03", { yPercent: -90, duration: 1.2, ease: "power2.inOut" }, "s3")
             .to("#card-04", { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "s3+=0.2") 
-            .to("#card-04", { yPercent: 106, duration: 1.2, ease: "power2.inOut" }, "s3")
+            .to("#card-04", { yPercent: 30, duration: 1.2, ease: "power2.inOut" }, "s3")
             // Quando S3 completa, texto do Card-04 surge
             .to("#card-04 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "s3+=1.2")
 
             .to({}, { duration: 1.0 }) 
 
-            // 1. Colapsa os cards primeiro (eles se juntam no centro, com informações e números ainda visíveis)
+            // 1. Colapsa os cards primeiro no centro (todos em yPercent: -50, informações e números ainda visíveis)
             .to(".s4-card", { yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "collapse")
             .to("#card-02, #card-03, #card-04", { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, "collapse+=0.4")
 
-            // 2. APÓS o colapso (cards juntos no centro), apaga as informações e números
+            // 2. APÓS o colapso, apaga as informações e números
             .to([".s4-text", ".s4-num"], { opacity: 0, duration: 0.4, ease: "power2.in" }, "collapse+=1.2")
             
             // 3. Simultaneamente, mostra a máscara branca (#white-rect) no tamanho exato do card
