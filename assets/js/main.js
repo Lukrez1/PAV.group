@@ -117,7 +117,23 @@ document.addEventListener("DOMContentLoaded", () => {
         gsap.timeline({
             scrollTrigger: { trigger: "#pin-master", start: "top top", end: "+=200%", pin: true, scrub: 1 }
         })
-        .to(".curtain", { scaleY: 1, stagger: 0.05, duration: 1, ease: "power2.inOut" })
+        .to(".hero-word", { 
+            opacity: 0, 
+            filter: "blur(12px)", 
+            y: -15, 
+            stagger: { amount: 0.3 }, 
+            duration: 0.6, 
+            ease: "power1.out" 
+        }, 0)
+        .to(".hero-sub-word", { 
+            opacity: 0, 
+            filter: "blur(8px)", 
+            y: -10, 
+            stagger: { amount: 0.3 }, 
+            duration: 0.6, 
+            ease: "power1.out" 
+        }, 0.1)
+        .to(".curtain", { scaleY: 1, stagger: 0.05, duration: 1, ease: "power2.inOut" }, 0)
         .fromTo(".word", { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.05, duration: 1, ease: "power2.out" }, "-=0.4")
         .to({}, { duration: 0.5 });
 
