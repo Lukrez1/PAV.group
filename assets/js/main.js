@@ -171,14 +171,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 // O texto do Card-02 surge suavemente conforme os cards se separam
                 .to("#card-02 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "split+=0.4")
 
-                // Cards-03 e 04 começam a voar ANTES de terminar o split de 01 e 02 (overlap de 50%)
+                // Card-03 aparece da esquerda para a direita (horizontal) e encaixa no grid
                 .fromTo("#card-03", 
-                    { autoAlpha: 0, xPercent: -100 - gap, yPercent: 100 + gap }, 
+                    { autoAlpha: 0, xPercent: -220 - gap, yPercent: -100 - gap }, 
                     { autoAlpha: 1, xPercent: -100 - gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, 
                     "split+=0.6"
                 )
+                // Card-04 aparece da direita para a esquerda (horizontal) e encaixa no grid
                 .fromTo("#card-04", 
-                    { autoAlpha: 0, xPercent: gap, yPercent: -100 - gap }, 
+                    { autoAlpha: 0, xPercent: 120 + gap, yPercent: gap }, 
                     { autoAlpha: 1, xPercent: gap, yPercent: gap, duration: 1.2, ease: "power2.inOut" }, 
                     "split+=0.6"
                 )
@@ -329,5 +330,17 @@ document.addEventListener("DOMContentLoaded", () => {
             .fromTo(".footer-legal", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "expand+=1.2")
             .to({}, { duration: 1.5 }); // Aumentado para 1.5s de buffer de scroll para evitar rubber-band shrink no mobile
         });
+
+        // Mouse tracking for Section 4 cards
+        document.querySelectorAll('.s4-inner').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
     }
 });
