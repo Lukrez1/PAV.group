@@ -107,3 +107,272 @@ body {
 @media (max-width: 767px) {
     .s4-text { opacity: 1 !important; transform: translateY(0) !important; }
 }
+
+/* Sparkle Button Custom Styles */
+.sparkle-btn {
+  --black-700: hsla(0, 0%, 12%, 1);
+  --border_radius: 9999px;
+  --transtion: 0.3s ease-in-out;
+  --offset: 2px;
+  --active: 0;
+
+  cursor: pointer;
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  transform-origin: center;
+  background-color: transparent;
+  text-decoration: none;
+
+  border: none;
+  border-radius: var(--border_radius);
+  transform: scale(calc(1 + (var(--active, 0) * 0.05)));
+
+  transition: transform var(--transtion);
+}
+
+/* Sizes */
+/* sm size (for header nav) */
+.sparkle-btn-sm {
+  padding: 0.5rem 1.25rem;
+}
+.sparkle-btn-sm .text_button {
+  font-size: 0.85rem;
+}
+.sparkle-btn-sm .arrow-icon {
+  width: 1rem;
+  height: 1rem;
+}
+.sparkle-btn-sm .dots_border::before {
+  height: 1.25rem;
+}
+
+/* md size (for mobile hero) */
+.sparkle-btn-md {
+  padding: 0.75rem 1.75rem;
+}
+.sparkle-btn-md .text_button {
+  font-size: 0.95rem;
+}
+.sparkle-btn-md .arrow-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.sparkle-btn-md .dots_border::before {
+  height: 1.5rem;
+}
+
+/* lg size (for footer) */
+.sparkle-btn-lg {
+  padding: 1.1rem 2.25rem;
+}
+.sparkle-btn-lg .text_button {
+  font-size: 1.1rem;
+}
+.sparkle-btn-lg .arrow-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.sparkle-btn-lg .dots_border::before {
+  height: 2.25rem;
+}
+
+@media (max-width: 640px) {
+  .sparkle-btn-lg {
+    padding: 0.85rem 1.75rem;
+  }
+  .sparkle-btn-lg .text_button {
+    font-size: 0.95rem;
+  }
+  .sparkle-btn-lg .arrow-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.sparkle-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  background-color: var(--black-700);
+
+  border-radius: var(--border_radius);
+  box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1px 2px 0 hsl(0, 0%, 0%),
+    0px 4px 10px -4px hsla(0, 0%, 0% / calc(1 - var(--active, 0))),
+    0 0 0 calc(var(--active, 0) * 0.375rem) hsl(260, 97%, 50%, 0.75);
+
+  transition: all var(--transtion);
+  z-index: 0;
+}
+
+.sparkle-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  background-color: hsla(260, 97%, 61%, 0.75);
+  background-image: radial-gradient(
+      at 51% 89%,
+      hsla(266, 45%, 74%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 100% 100%, hsla(266, 36%, 60%, 1) 0px, transparent 50%),
+    radial-gradient(at 22% 91%, hsla(266, 36%, 60%, 1) 0px, transparent 50%);
+  background-position: top;
+
+  opacity: var(--active, 0);
+  border-radius: var(--border_radius);
+  transition: opacity var(--transtion);
+  z-index: 2;
+}
+
+.sparkle-btn:is(:hover, :focus-visible, :focus) {
+  --active: 1;
+}
+.sparkle-btn:active {
+  transform: scale(1);
+}
+
+.sparkle-btn .dots_border {
+  --size_border: calc(100% + 2px);
+
+  overflow: hidden;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: var(--size_border);
+  height: var(--size_border);
+  background-color: transparent;
+
+  border-radius: var(--border_radius);
+  z-index: -10;
+}
+
+.sparkle-btn .dots_border::before {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left;
+  transform: rotate(0deg);
+
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+
+  mask: linear-gradient(transparent 0%, white 120%);
+  -webkit-mask: linear-gradient(transparent 0%, white 120%);
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sparkle-btn .arrow-icon {
+  position: relative;
+  z-index: 10;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
+  color: hsl(0, 0%, 100%);
+  stroke: currentColor;
+  stroke-width: 2px;
+  fill: none;
+  transition: transform var(--transtion);
+}
+
+.sparkle-btn:is(:hover, :focus) .arrow-icon {
+  transform: translateX(4px);
+}
+
+.sparkle-btn .text_button {
+  position: relative;
+  z-index: 10;
+
+  background-image: linear-gradient(
+    90deg,
+    hsla(0, 0%, 100%, 1) 0%,
+    hsla(0, 0%, 100%, var(--active, 0)) 120%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  font-size: inherit;
+  color: transparent;
+  transition: background-image var(--transtion);
+}
+
+/* White Theme Sparkle Button (Entrar em contato) */
+.sparkle-btn-light {
+  --black-700: hsla(0, 0%, 100%, 1); /* White background */
+  border: 1px solid rgba(0, 0, 0, 0.08); /* subtle dark border */
+}
+
+.sparkle-btn-light::before {
+  box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.08),
+    0px 4px 10px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove hover purple background gradient completely */
+.sparkle-btn-light::after {
+  display: none;
+}
+
+/* Soft gray rotating border highlight */
+.sparkle-btn-light .dots_border::before {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Text: Black with lower opacity, transitioning to solid black on hover */
+.sparkle-btn-light .text_button {
+  background-image: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.7) !important;
+  transition: color var(--transtion), -webkit-text-fill-color var(--transtion);
+}
+
+.sparkle-btn-light:is(:hover, :focus-visible, :focus) .text_button {
+  color: rgba(0, 0, 0, 1) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 1) !important;
+}
+
+/* Arrow: Black with lower opacity, transitioning to solid black on hover */
+.sparkle-btn-light .arrow-icon {
+  color: rgba(0, 0, 0, 0.7) !important;
+  transition: transform var(--transtion), color var(--transtion);
+}
+
+.sparkle-btn-light:is(:hover, :focus-visible, :focus) .arrow-icon {
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+/* Slight off-white background on hover */
+.sparkle-btn-light:is(:hover, :focus-visible, :focus) {
+  background-color: #f4f4f5;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+
+

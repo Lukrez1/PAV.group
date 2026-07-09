@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Initialize Lucide Icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     
     const lenis = new Lenis({
@@ -153,12 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
+            gsap.set("#card-01 .s4-text", { opacity: 1, y: 0 }); // Show Card 01 text immediately
             gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 });
             const gap = 3; 
 
             s4Tl.to({}, { duration: 0.5 }) 
-                // O texto do Card-01 entra suavemente no scroll inicial
-                .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
+                // Card 01 text is already visible from the start
 
                 .to("#card-02", { autoAlpha: 1, duration: 0.1 }, "split") 
                 .to("#card-01", { xPercent: gap, yPercent: -100 - gap, duration: 1.2, ease: "power2.inOut" }, "split")
@@ -180,7 +185,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Textos dos Cards-03 e 04 surgem de forma sobreposta
                 .to(["#card-03 .s4-text", "#card-04 .s4-text"], { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "split+=1.0")
 
-                .to({}, { duration: 1.5 }) 
+                // Reduced pause to collapse cards much earlier
+                .to({}, { duration: 0.4 }) 
                 
                 // 1. Colapsa os cards primeiro (eles se juntam no centro, com informações e números ainda visíveis)
                 .to(".s4-card", { xPercent: -50, yPercent: -50, duration: 1.2, ease: "power2.inOut" }, "collapse")
@@ -188,6 +194,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 2. APÓS o colapso (cards juntos no centro), apaga as informações e números
                 .to([".s4-text", ".s4-num"], { opacity: 0, duration: 0.4, ease: "power2.in" }, "collapse+=1.2")
                 
+                // Dynamic size matching to start expanding #white-rect at the exact dimensions of a card
+                .set("#white-rect", {
+                    width: () => {
+                        const card = document.querySelector('#card-01');
+                        return card ? card.getBoundingClientRect().width : "44vw";
+                    },
+                    height: () => {
+                        const card = document.querySelector('#card-01');
+                        return card ? card.getBoundingClientRect().height : "auto";
+                    },
+                    borderRadius: "16px"
+                }, "collapse+=1.2")
+
                 // 3. Simultaneamente, mostra a máscara branca (#white-rect) no tamanho exato do card
                 .to("#white-rect", { opacity: 1, duration: 0.4 }, "collapse+=1.2")
                 
@@ -225,6 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             gsap.set(".s4-card, #white-rect", { xPercent: -50, yPercent: -50 });
+            gsap.set("#card-01 .s4-text", { opacity: 1, y: 0 }); // Show Card 01 text immediately
             gsap.set("#card-02, #card-03, #card-04", { autoAlpha: 0 }); 
             
             gsap.set("#card-01", { zIndex: 40 });
@@ -237,8 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             s4TlMobile
-            // Texto do Card-01 entra suave no início
-            .to("#card-01 .s4-text", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" })
+            // Card 01 text is already visible from the start
 
             // S1: Começa a subir. Texto do Card-01 apaga (número continua visível!)
             .to("#card-01 .s4-text", { opacity: 0, duration: 0.3 }, "s1")
@@ -274,6 +293,19 @@ document.addEventListener("DOMContentLoaded", () => {
             // 2. APÓS o colapso, apaga as informações e números
             .to([".s4-text", ".s4-num"], { opacity: 0, duration: 0.3, ease: "power2.in" }, "collapse+=1.0")
             
+            // Dynamic size matching to start expanding #white-rect at the exact dimensions of a card on mobile
+            .set("#white-rect", {
+                width: () => {
+                    const card = document.querySelector('#card-01');
+                    return card ? card.getBoundingClientRect().width : "88vw";
+                },
+                height: () => {
+                    const card = document.querySelector('#card-01');
+                    return card ? card.getBoundingClientRect().height : "35vh";
+                },
+                borderRadius: "12px"
+            }, "collapse+=1.0")
+
             // 3. Simultaneamente, mostra a máscara branca (#white-rect) no tamanho exato do card e esconde os fundos dos cards
             .to("#white-rect", { autoAlpha: 1, duration: 0.3 }, "collapse+=1.0")
             .to(".s4-card", { autoAlpha: 0, duration: 0.3 }, "collapse+=1.0")
